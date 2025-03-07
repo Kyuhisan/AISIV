@@ -1,49 +1,54 @@
-import si.feri.dao.ChargingStation_DAO;
-import si.feri.dao.Provider_DAO;
-import si.feri.vao_model.ChargingStation_VAO;
-import si.feri.vao_model.Connector_VAO;
-import si.feri.vao_model.Provider_VAO;
-import si.feri.vao_model.Regions_VAO;
+import si.feri.dao.dao_Provider;
+import si.feri.dao.dao_Station;
+import si.feri.vao.vao_Station;
+import si.feri.enums.enum_Connector;
+import si.feri.vao.vao_Provider;
+import si.feri.enums.enum_Region;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
-    private static final ChargingStation_DAO chargingStationDAO = new ChargingStation_DAO();
-    private static final Provider_DAO providerDAO = new Provider_DAO();
+    private static final dao_Station dao_station = new dao_Station();
+    private static final dao_Provider dao_Provider = new dao_Provider();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         initializeData();
         while (true) {
             System.out.println("\n🔌 EV Charging Station System");
-            System.out.println("1️⃣ Add Provider");
-            System.out.println("2️⃣ View Providers");
-            System.out.println("3️⃣ Update Provider");
-            System.out.println("4️⃣ Delete Provider");
-            System.out.println("5️⃣ Add Charging Station");
-            System.out.println("6️⃣ View Charging Stations");
-            System.out.println("7️⃣ Update Charging Station");
-            System.out.println("8️⃣ Delete Charging Station");
-            System.out.println("9️⃣ Find Provider");
-            System.out.println("🔟 Find Charging Station");
+            System.out.println("1️⃣ View Providers");
+            System.out.println("2️⃣ View Stations");
+            System.out.println();
+            System.out.println("3️⃣ Find Provider");
+            System.out.println("4️⃣ Find Station");
+            System.out.println();
+            System.out.println("5️⃣ Add Provider ");
+            System.out.println("6️⃣ Add Station");
+            System.out.println();
+            System.out.println("7️⃣ Update Provider");
+            System.out.println("8️⃣ Update Station");
+            System.out.println();
+            System.out.println("9️⃣ Delete Provider");
+            System.out.println("🔟 Delete Station");
+            System.out.println();
             System.out.println("0️⃣ Exit");
             System.out.print("Enter choice: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
-                case 1 -> addProvider();
-                case 2 -> viewProviders();
-                case 3 -> updateProvider();
-                case 4 -> deleteProvider();
-                case 5 -> addChargingStation();
-                case 6 -> viewChargingStations();
-                case 7 -> updateChargingStation();
-                case 8 -> deleteChargingStation();
-                case 9 -> findProvider();
-                case 10 -> findChargingStation();
+                case 1 -> viewProviders();
+                case 2 -> viewStation();
+                case 3 -> findProvider();
+                case 4 -> findStation();
+                case 5 -> addProvider();
+                case 6 -> addStation();
+                case 7 -> updateProvider();
+                case 8 -> updateStation();
+                case 9 -> deleteProvider();
+                case 10 -> deleteStation();
                 case 0 -> {
                     System.out.println("🚪 Exiting...");
                     scanner.close();
@@ -55,164 +60,251 @@ public class Main {
     }
 
     private static void initializeData() {
-        Provider_VAO provider1 = new Provider_VAO("Elektro Maribor", Regions_VAO.EUROPE);
-        Provider_VAO provider2 = new Provider_VAO("Petrol Slovenia", Regions_VAO.EUROPE);
-        Provider_VAO provider3 = new Provider_VAO("Tesla Superchargers", Regions_VAO.AMERICA);
-        Provider_VAO provider4 = new Provider_VAO("Shell Recharge", Regions_VAO.ASIA);
-        Provider_VAO provider5 = new Provider_VAO("Green Energy", Regions_VAO.EUROPE);
+        vao_Provider provider1 = new vao_Provider("Elektro Maribor", enum_Region.EUROPE);
+        vao_Provider provider2 = new vao_Provider("Petrol Slovenia", enum_Region.EUROPE);
+        vao_Provider provider3 = new vao_Provider("Tesla Superchargers", enum_Region.AMERICA);
+        vao_Provider provider4 = new vao_Provider("Shell Recharge", enum_Region.ASIA);
+        vao_Provider provider5 = new vao_Provider("Green Energy", enum_Region.EUROPE);
 
-        // Adding Providers to DAO
-        providerDAO.createProvider(provider1);
-        providerDAO.createProvider(provider2);
-        providerDAO.createProvider(provider3);
-        providerDAO.createProvider(provider4);
-        providerDAO.createProvider(provider5);
+        //  Adding Providers to DAO
+        dao_Provider.addProvider(provider1);
+        dao_Provider.addProvider(provider2);
+        dao_Provider.addProvider(provider3);
+        dao_Provider.addProvider(provider4);
+        dao_Provider.addProvider(provider5);
 
-        // Creating Charging Stations
-        ChargingStation_VAO station1 = new ChargingStation_VAO(provider1.getProviderName(), Connector_VAO.TYPE2, "Maribor - Center", true);
-        ChargingStation_VAO station2 = new ChargingStation_VAO(provider1.getProviderName(), Connector_VAO.CCS, "Ljubljana - BTC", false);
-        ChargingStation_VAO station3 = new ChargingStation_VAO(provider2.getProviderName(), Connector_VAO.CHADEMO, "Kranj - Main Road", true);
-        ChargingStation_VAO station4 = new ChargingStation_VAO(provider2.getProviderName(), Connector_VAO.TYPE1, "Celje - South", true);
-        ChargingStation_VAO station5 = new ChargingStation_VAO(provider3.getProviderName(), Connector_VAO.TESLA, "San Francisco - Market St.", true);
-        ChargingStation_VAO station6 = new ChargingStation_VAO(provider3.getProviderName(), Connector_VAO.CCS, "Los Angeles - Hollywood Blvd.", false);
-        ChargingStation_VAO station7 = new ChargingStation_VAO(provider4.getProviderName(), Connector_VAO.DOMESTIC, "Tokyo - Shibuya", true);
-        ChargingStation_VAO station8 = new ChargingStation_VAO(provider4.getProviderName(), Connector_VAO.TYPE2, "Shanghai - Pudong", false);
-        ChargingStation_VAO station9 = new ChargingStation_VAO(provider5.getProviderName(), Connector_VAO.TYPE1, "Vienna - City Center", true);
-        ChargingStation_VAO station10 = new ChargingStation_VAO(provider5.getProviderName(), Connector_VAO.CCS, "Berlin - Alexanderplatz", true);
+        //  Creating Charging Stations
+        vao_Station station1 = new vao_Station(provider1, enum_Connector.TYPE2, "Maribor - Center", true);
+        vao_Station station2 = new vao_Station(provider1, enum_Connector.CCS, "Ljubljana - BTC", false);
+        vao_Station station3 = new vao_Station(provider2, enum_Connector.CHADEMO, "Kranj - Main Road", true);
+        vao_Station station4 = new vao_Station(provider2, enum_Connector.TYPE1, "Celje - South", true);
+        vao_Station station5 = new vao_Station(provider3, enum_Connector.TESLA, "San Francisco - Market St.", true);
+        vao_Station station6 = new vao_Station(provider3, enum_Connector.CCS, "Los Angeles - Hollywood Blvd.", false);
+        vao_Station station7 = new vao_Station(provider4, enum_Connector.DOMESTIC, "Tokyo - Shibuya", true);
+        vao_Station station8 = new vao_Station(provider4, enum_Connector.TYPE2, "Shanghai - Pudong", false);
+        vao_Station station9 = new vao_Station(provider5, enum_Connector.TYPE1, "Vienna - City Center", true);
+        vao_Station station10 = new vao_Station(provider5, enum_Connector.CCS, "Berlin - Alexanderplatz", true);
 
-        // Adding Charging Stations to DAO
-        chargingStationDAO.createChargingStation(station1);
-        chargingStationDAO.createChargingStation(station2);
-        chargingStationDAO.createChargingStation(station3);
-        chargingStationDAO.createChargingStation(station4);
-        chargingStationDAO.createChargingStation(station5);
-        chargingStationDAO.createChargingStation(station6);
-        chargingStationDAO.createChargingStation(station7);
-        chargingStationDAO.createChargingStation(station8);
-        chargingStationDAO.createChargingStation(station9);
-        chargingStationDAO.createChargingStation(station10);
+        //  Adding Charging Stations to DAO
+        dao_station.addChargingStation(station1);
+        dao_station.addChargingStation(station2);
+        dao_station.addChargingStation(station3);
+        dao_station.addChargingStation(station4);
+        dao_station.addChargingStation(station5);
+        dao_station.addChargingStation(station6);
+        dao_station.addChargingStation(station7);
+        dao_station.addChargingStation(station8);
+        dao_station.addChargingStation(station9);
+        dao_station.addChargingStation(station10);
 
-        // Adding Charging Stations to providers
-        provider1.getListOfStations().add(station1.getLocation());
-        provider1.getListOfStations().add(station2.getLocation());
-        provider2.getListOfStations().add(station3.getLocation());
-        provider2.getListOfStations().add(station4.getLocation());
-        provider3.getListOfStations().add(station5.getLocation());
-        provider3.getListOfStations().add(station6.getLocation());
-        provider4.getListOfStations().add(station7.getLocation());
-        provider4.getListOfStations().add(station8.getLocation());
-        provider5.getListOfStations().add(station9.getLocation());
-        provider5.getListOfStations().add(station10.getLocation());
+        //  Adding Charging Stations to providers
+        provider1.getListOfStations().add(station1);
+        provider1.getListOfStations().add(station2);
+        provider2.getListOfStations().add(station3);
+        provider2.getListOfStations().add(station4);
+        provider3.getListOfStations().add(station5);
+        provider3.getListOfStations().add(station6);
+        provider4.getListOfStations().add(station7);
+        provider4.getListOfStations().add(station8);
+        provider5.getListOfStations().add(station9);
+        provider5.getListOfStations().add(station10);
+    }
+    private static void listProviders() {
+        System.out.println("\nAvailable Providers:");
+        dao_Provider.getProviders().forEach(provider -> System.out.println("- " + provider.getProviderName()));
+    }
+    private static void listStations() {
+        System.out.println("\nAvailable Stations:");
+        dao_station.getChargingStations().forEach(provider -> System.out.println("- " + provider.getLocation()));
+    }
+
+    private static void viewProviders() {
+        System.out.println("\n📌 Providers:");
+        dao_Provider.getProviders().forEach(System.out::println);
+    }
+    private static void viewStation() {
+        System.out.println("\n🔋 Stations:");
+        dao_station.getChargingStations().forEach(System.out::println);
+    }
+
+    private static void findProvider() {
+        listProviders();
+        System.out.print("Enter Provider Name: ");
+        String providerName = scanner.nextLine();
+
+        dao_Provider.getProviderByName(providerName).ifPresentOrElse(
+                System.out::println,
+                () -> System.out.println("❌ Provider not found!")
+        );
+    }
+    private static void findStation() {
+        listStations();
+        System.out.print("Enter Station Location: ");
+        String stationLocation = scanner.nextLine();
+
+        dao_station.getChargingStationByLocation(stationLocation).ifPresentOrElse(
+                System.out::println,
+                () -> System.out.println("❌ Station not found!")
+        );
     }
 
     private static void addProvider() {
         System.out.print("Enter Provider Name: ");
         String name = scanner.nextLine();
-        System.out.print("Enter Active Region (EUROPE, ASIA, AMERICA, AFRICA, AUSTRALIA, ANTARCTICA, UNKNOWN): ");
-        Regions_VAO region = Regions_VAO.valueOf(scanner.nextLine().toUpperCase());
-        Provider_VAO provider = new Provider_VAO(name, region);
-        providerDAO.createProvider(provider);
+
+        enum_Region region = null;
+        while (region == null) {
+            System.out.print("Enter Active Region " + Arrays.toString(enum_Region.values()) + ": ");
+            String regionInput = scanner.nextLine().toUpperCase();
+            try {
+                region = enum_Region.valueOf(regionInput);
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Invalid region! Please enter a valid option.");
+            }
+        }
+
+        vao_Provider provider = new vao_Provider(name, region);
+        dao_Provider.addProvider(provider);
         System.out.println("✅ Provider added!");
     }
+    private static void addStation() {
+        System.out.print("Enter Station Location: ");
+        String location = scanner.nextLine();
 
-    private static void viewProviders() {
-        System.out.println("\n📌 Providers:");
-        providerDAO.getProviders().forEach(provider ->
-                System.out.println("🏢 " + provider.getProviderName() + " | Charging Stations: " + provider.getListOfStations() + " | Active Region: " + provider.getActiveRegion())
-        );
+        enum_Connector connector = null;
+        while (connector == null) {
+            System.out.print("Enter Connector Type " + Arrays.toString(enum_Connector.values()) + ": ");
+            String connectorInput = scanner.nextLine().toUpperCase();
+
+            try {
+                connector = enum_Connector.valueOf(connectorInput);
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Invalid connector type! Please enter a valid option.");
+            }
+        }
+
+        if (dao_Provider.getProviders().isEmpty()) {
+            System.out.println("❌ No providers available. Please add a provider first.");
+            return;
+        }
+
+        listProviders();
+        Optional<vao_Provider> provider = Optional.empty();
+        while (provider.isEmpty()) {
+            System.out.print("\nEnter Provider Name: ");
+            String providerName = scanner.nextLine();
+            provider = dao_Provider.getProviderByName(providerName);
+
+            if (provider.isEmpty()) {
+                System.out.println("❌ Provider not found! Please enter a valid provider from the list.");
+            }
+        }
+
+        vao_Station station = new vao_Station(provider.get(), connector, location, true);
+        dao_station.addChargingStation(station);
+        provider.get().getListOfStations().add(station);
+        System.out.println("✅ Station added!");
     }
 
     private static void updateProvider() {
+        listProviders();
         System.out.print("Enter Provider Name to Update: ");
         String name = scanner.nextLine();
-        Optional<Provider_VAO> existingProvider = providerDAO.getProviderByName(name);
+        Optional<vao_Provider> optionalProvider = dao_Provider.getProviderByName(name);
 
-        if (existingProvider.isPresent()) {
-            Provider_VAO provider = existingProvider.get();
+        if (optionalProvider.isPresent()) {
+            vao_Provider provider = optionalProvider.get();
+
             System.out.print("Enter New Provider Name: ");
             provider.setProviderName(scanner.nextLine());
 
-            System.out.print("Enter New Active Region: ");
-            provider.setActiveRegion(Regions_VAO.valueOf(scanner.nextLine().toUpperCase()));
-
-            System.out.print("Enter Charging Station Name to Add (or press Enter to skip): ");
-            String stationLocation = scanner.nextLine();
-            if (!stationLocation.isEmpty()) {
-                Optional<ChargingStation_VAO> station = chargingStationDAO.getChargingStationByLocation(stationLocation);
-                if (station.isPresent()) {
-                    List<String> updatedList = provider.getListOfStations();
-                    updatedList.add(station.get().getLocation());
-                    provider.setListOfStations(updatedList);
-                    System.out.println("✅ Charging Station added to provider!");
-                } else {
-                    System.out.println("❌ Charging Station not found!");
+            enum_Region region = null;
+            while (region == null) {
+                System.out.print("Enter Active Region " + Arrays.toString(enum_Region.values()) + ": ");
+                String regionInput = scanner.nextLine().toUpperCase();
+                try {
+                    region = enum_Region.valueOf(regionInput);
+                    provider.setActiveRegion(region);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("❌ Invalid region! Please enter a valid option.");
                 }
             }
 
-            providerDAO.updateProvider(provider);
+            listStations();
+            System.out.print("Enter Station to Remove (or press Enter to skip): ");
+            String stationLocation = scanner.nextLine();
+
+            if (!stationLocation.isEmpty()) {
+                Optional<vao_Station> station = provider.getListOfStations().stream()
+                        .filter(s -> s.getLocation().equalsIgnoreCase(stationLocation))
+                        .findFirst();
+
+                if (station.isPresent()) {
+                    provider.getListOfStations().remove(station.get());
+                    System.out.println("✅ Charging Station removed from provider!");
+                } else {
+                    System.out.println("❌ Charging Station not found in this provider's list!");
+                }
+            }
+
+            dao_Provider.updateProvider(provider);
             System.out.println("✅ Provider updated!");
         } else {
             System.out.println("❌ Provider not found!");
         }
     }
 
-    private static void deleteProvider() {
-        System.out.print("Enter Provider Name to Delete: ");
-        String name = scanner.nextLine();
-        providerDAO.deleteProvider(name);
-        System.out.println("✅ Provider deleted!");
-    }
-
-    private static void addChargingStation() {
-        System.out.print("Enter Charging Station Location: ");
+    private static void updateStation() {
+        listStations();
+        System.out.print("Enter Station Location to Update: ");
         String location = scanner.nextLine();
-        System.out.print("Enter Connector Type (CHADEMO, CCS, TYPE2, TYPE1, DOMESTIC, TESLA): ");
-        Connector_VAO connector = Connector_VAO.valueOf(scanner.nextLine().toUpperCase());
-        System.out.print("Enter Provider Name: ");
-        String providerName = scanner.nextLine();
-        Optional<Provider_VAO> provider = providerDAO.getProviderByName(providerName);
+        Optional<vao_Station> optionalStation = dao_station.getChargingStationByLocation(location);
 
-        if (provider.isPresent()) {
-            ChargingStation_VAO station = new ChargingStation_VAO(provider.get().getProviderName(), connector, location, true);
-            chargingStationDAO.createChargingStation(station);
-            provider.get().getListOfStations().add(station.getProviderName());
-            System.out.println("✅ Charging Station added!");
-        } else {
-            System.out.println("❌ Provider not found!");
-        }
-    }
+        if (optionalStation.isPresent()) {
+            vao_Station station = optionalStation.get();
+            vao_Provider oldProvider = station.getProvider();
 
-    private static void viewChargingStations() {
-        System.out.println("\n🔋 Charging Stations:");
-        chargingStationDAO.getChargingStations().forEach(station ->
-                System.out.println("📍 Location: " + station.getLocation() +
-                        " | Provider: " + station.getProviderName() +
-                        " | Connector: " + station.getConnector() +
-                        " | Available: " + (station.isAvailable() ? "Yes" : "No"))
-        );
-    }
+            enum_Connector connector = null;
+            while (connector == null) {
+                System.out.print("Enter New Connector Type " + Arrays.toString(enum_Connector.values()) + ": ");
+                String connectorInput = scanner.nextLine().toUpperCase();
+                try {
+                    connector = enum_Connector.valueOf(connectorInput);
+                    station.setConnector(connector);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("❌ Invalid connector type! Please enter a valid option.");
+                }
+            }
 
-    private static void updateChargingStation() {
-        System.out.print("Enter Charging Station Location to Update: ");
-        String location = scanner.nextLine();
-        Optional<ChargingStation_VAO> existingStation = chargingStationDAO.getChargingStationByLocation(location);
+            Boolean isAvailable = null;
+            while (isAvailable == null) {
+                System.out.print("Is Available? (true/false): ");
+                String availabilityInput = scanner.nextLine().toLowerCase();
+                if (availabilityInput.equals("true") || availabilityInput.equals("false")) {
+                    isAvailable = Boolean.parseBoolean(availabilityInput);
+                    station.setAvailable(isAvailable);
+                } else {
+                    System.out.println("❌ Invalid input! Please enter 'true' or 'false'.");
+                }
+            }
 
-        if (existingStation.isPresent()) {
-            ChargingStation_VAO station = existingStation.get();
-            System.out.print("Enter New Connector Type: ");
-            station.setConnector(Connector_VAO.valueOf(scanner.nextLine().toUpperCase()));
-
-            System.out.print("Is Available? (true/false): ");
-            station.setAvailable(scanner.nextBoolean());
-            scanner.nextLine();
-
+            listProviders();
             System.out.print("Enter New Provider Name (or press Enter to keep current): ");
             String newProviderName = scanner.nextLine();
             if (!newProviderName.isEmpty()) {
-                Optional<Provider_VAO> newProvider = providerDAO.getProviderByName(newProviderName);
+                Optional<vao_Provider> newProvider = dao_Provider.getProviderByName(newProviderName);
+
                 if (newProvider.isPresent()) {
-                    station.setProvider(newProvider.get().getProviderName());
-                    System.out.println("✅ Provider updated!");
+                    vao_Provider newProviderObj = newProvider.get();
+
+                    if (!newProviderObj.equals(oldProvider)) {
+                        oldProvider.getListOfStations().remove(station);
+                        newProviderObj.getListOfStations().add(station);
+                        station.setProvider(newProviderObj);
+                        System.out.println("✅ Provider updated!");
+                    } else {
+                        System.out.println("⚠️ Provider is the same, no changes made.");
+                    }
                 } else {
                     System.out.println("❌ New provider not found! Keeping current provider.");
                 }
@@ -224,160 +316,41 @@ public class Main {
                 station.setLocation(newLocation);
                 System.out.println("✅ Location updated!");
             }
+            dao_station.updateChargingStation(station);
+            dao_Provider.updateProvider(oldProvider);
+            dao_Provider.updateProvider(station.getProvider());
 
-            chargingStationDAO.updateChargingStation(station);
             System.out.println("✅ Charging Station updated!");
         } else {
             System.out.println("❌ Charging Station not found!");
         }
     }
 
-    private static void deleteChargingStation() {
-        System.out.print("Enter Charging Station Location to Delete: ");
-        String location = scanner.nextLine();
-        chargingStationDAO.deleteChargingStation(location);
-        System.out.println("✅ Charging Station deleted!");
-    }
 
-    private static void findProvider() {
-        System.out.print("Enter Provider Name: ");
+    private static void deleteProvider() {
+        listProviders();
+        System.out.print("Enter Provider Name to Delete: ");
         String name = scanner.nextLine();
-        Optional<Provider_VAO> provider = providerDAO.getProviderByName(name);
-        provider.ifPresentOrElse(
-                System.out::println,
-                () -> System.out.println("❌ Provider not found!")
-        );
-    }
 
-    private static void findChargingStation() {
-        System.out.print("Enter Charging Station Location: ");
+        Optional<vao_Provider> provider = dao_Provider.getProviderByName(name);
+        if (provider.isPresent()) {
+            dao_Provider.deleteProvider(name);
+            System.out.println("✅ Provider deleted!");
+        } else {
+            System.out.println("❌ Provider not found!");
+        }
+    }
+    private static void deleteStation() {
+        listStations();
+        System.out.print("Enter Station Location to Delete: ");
         String location = scanner.nextLine();
-        Optional<ChargingStation_VAO> station = chargingStationDAO.getChargingStationByLocation(location);
-        station.ifPresentOrElse(
-                System.out::println,
-                () -> System.out.println("❌ Charging Station not found!")
-        );
+
+        Optional<vao_Station> station = dao_station.getChargingStationByLocation(location);
+        if (station.isPresent()) {
+            dao_station.deleteChargingStation(location);
+            System.out.println("✅ Station deleted!");
+        } else {
+            System.out.println("❌ Station not found!");
+        }
     }
 }
-
-
-//import si.feri.dao.ChargingStation_DAO;
-//import si.feri.dao.Provider_DAO;
-//import si.feri.vao_model.ChargingStation_VAO;
-//import si.feri.vao_model.Connector_VAO;
-//import si.feri.vao_model.Provider_VAO;
-//import si.feri.vao_model.Regions_VAO;
-//
-//public class Main {
-//    public static void main(String[] args) {
-//        ChargingStation_DAO chargingStationDAO = new ChargingStation_DAO();
-//        Provider_DAO providerDAO = new Provider_DAO();
-//
-//        // Creating Providers
-//        Provider_VAO provider1 = new Provider_VAO("Elektro Maribor", Regions_VAO.EUROPE);
-//        Provider_VAO provider2 = new Provider_VAO("Petrol Slovenia", Regions_VAO.EUROPE);
-//        Provider_VAO provider3 = new Provider_VAO("Tesla Superchargers", Regions_VAO.AMERICA);
-//        Provider_VAO provider4 = new Provider_VAO("Shell Recharge", Regions_VAO.ASIA);
-//        Provider_VAO provider5 = new Provider_VAO("Green Energy", Regions_VAO.EUROPE);
-//
-//        // Adding Providers to DAO
-//        providerDAO.createProvider(provider1);
-//        providerDAO.createProvider(provider2);
-//        providerDAO.createProvider(provider3);
-//        providerDAO.createProvider(provider4);
-//        providerDAO.createProvider(provider5);
-//
-//        // Creating Charging Stations
-//        ChargingStation_VAO station1 = new ChargingStation_VAO(provider1.getProviderName(), Connector_VAO.TYPE2, "Maribor - Center", true);
-//        ChargingStation_VAO station2 = new ChargingStation_VAO(provider1.getProviderName(), Connector_VAO.CCS, "Ljubljana - BTC", false);
-//        ChargingStation_VAO station3 = new ChargingStation_VAO(provider2.getProviderName(), Connector_VAO.CHADEMO, "Kranj - Main Road", true);
-//        ChargingStation_VAO station4 = new ChargingStation_VAO(provider2.getProviderName(), Connector_VAO.TYPE1, "Celje - South", true);
-//        ChargingStation_VAO station5 = new ChargingStation_VAO(provider3.getProviderName(), Connector_VAO.TESLA, "San Francisco - Market St.", true);
-//        ChargingStation_VAO station6 = new ChargingStation_VAO(provider3.getProviderName(), Connector_VAO.CCS, "Los Angeles - Hollywood Blvd.", false);
-//        ChargingStation_VAO station7 = new ChargingStation_VAO(provider4.getProviderName(), Connector_VAO.DOMESTIC, "Tokyo - Shibuya", true);
-//        ChargingStation_VAO station8 = new ChargingStation_VAO(provider4.getProviderName(), Connector_VAO.TYPE2, "Shanghai - Pudong", false);
-//        ChargingStation_VAO station9 = new ChargingStation_VAO(provider5.getProviderName(), Connector_VAO.TYPE1, "Vienna - City Center", true);
-//        ChargingStation_VAO station10 = new ChargingStation_VAO(provider5.getProviderName(), Connector_VAO.CCS, "Berlin - Alexanderplatz", true);
-//
-//        // Adding Charging Stations to DAO
-//        chargingStationDAO.createChargingStation(station1);
-//        chargingStationDAO.createChargingStation(station2);
-//        chargingStationDAO.createChargingStation(station3);
-//        chargingStationDAO.createChargingStation(station4);
-//        chargingStationDAO.createChargingStation(station5);
-//        chargingStationDAO.createChargingStation(station6);
-//        chargingStationDAO.createChargingStation(station7);
-//        chargingStationDAO.createChargingStation(station8);
-//        chargingStationDAO.createChargingStation(station9);
-//        chargingStationDAO.createChargingStation(station10);
-//
-//        // Adding Charging Stations to providers
-//        provider1.getListOfStations().add(station1.getProviderName());
-//        provider1.getListOfStations().add(station2.getProviderName());
-//        provider2.getListOfStations().add(station3.getProviderName());
-//        provider2.getListOfStations().add(station4.getProviderName());
-//        provider3.getListOfStations().add(station5.getProviderName());
-//        provider3.getListOfStations().add(station6.getProviderName());
-//        provider4.getListOfStations().add(station7.getProviderName());
-//        provider4.getListOfStations().add(station8.getProviderName());
-//        provider5.getListOfStations().add(station9.getProviderName());
-//        provider5.getListOfStations().add(station10.getProviderName());
-//
-//        // Printing all providers
-//        System.out.println("\n📌 Providers:");
-//        providerDAO.getProviders().forEach(provider ->
-//                System.out.println("🏢 " + provider.getProviderName() + " | Active Region: " + provider.getActiveRegion())
-//        );
-//
-//        // Printing all charging stations
-//        System.out.println("\n🔋 Charging Stations:");
-//        chargingStationDAO.getChargingStations().forEach(station ->
-//                System.out.println("📍 Location: " + station.getLocation() +
-//                        " | Provider: " + station.getProviderName() +
-//                        " | Connector: " + station.getConnector() +
-//                        " | Available: " + (station.isAvailable() ? "Yes" : "No"))
-//        );
-//
-//        // Updating Provider
-//        System.out.println("\n🔄 Updating Provider 'Elektro Maribor' to 'Elektro Ljubljana'...");
-//        Provider_VAO updatedProvider = new Provider_VAO("Elektro Ljubljana", Regions_VAO.EUROPE);
-//        providerDAO.updateProvider(updatedProvider);
-//
-//        // Updating Charging Station Availability
-//        System.out.println("\n🔄 Updating 'Maribor - Center' station availability to false...");
-//        station1.setAvailable(false);
-//        chargingStationDAO.updateChargingStation(station1);
-//
-//        // Fetching a Single Provider
-//        System.out.println("\n🔍 Fetching Provider by Name: 'Elektro Maribor'");
-//        providerDAO.getProviderByName("Elektro Maribor").ifPresent(System.out::println);
-//
-//        // Fetching a Single Charging Station
-//        System.out.println("\n🔍 Fetching Charging Station by Location: 'Maribor - Center'");
-//        chargingStationDAO.getChargingStationByLocation("Maribor - Center").ifPresent(System.out::println);
-//
-//        // Deleting a Provider
-//        System.out.println("\n❌ Deleting Provider 'Elektro Ljubljana'...");
-//        providerDAO.deleteProvider("Elektro Ljubljana");
-//
-//        // Deleting a Charging Station
-//        System.out.println("\n❌ Deleting Charging Station 'Celje - South'...");
-//        chargingStationDAO.deleteChargingStation("Celje - South");
-//
-//        // Printing all providers
-//        System.out.println("\n📌 Providers:");
-//        providerDAO.getProviders().forEach(provider ->
-//                System.out.println("🏢 " + provider.getProviderName() + " | Active Region: " + provider.getActiveRegion())
-//        );
-//
-//        // Printing all charging stations
-//        System.out.println("\n🔋 Charging Stations:");
-//        chargingStationDAO.getChargingStations().forEach(station ->
-//                System.out.println("📍 Location: " + station.getLocation() +
-//                        " | Provider: " + station.getProviderName() +
-//                        " | Connector: " + station.getConnector() +
-//                        " | Available: " + (station.isAvailable() ? "Yes" : "No"))
-//        );
-//    }
-//}
-//

@@ -1,5 +1,5 @@
-package si.feri.vao_model;
+package si.feri.enums;
 
-public enum Regions_VAO {
+public enum enum_Region {
     EUROPE, ASIA, AMERICA, AFRICA, AUSTRALIA, ANTARCTICA, UNKNOWN
 }
