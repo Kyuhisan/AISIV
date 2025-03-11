@@ -4,6 +4,7 @@ import si.feri.vao.vao_Provider;
 import si.feri.enums.enum_Region;
 import si.feri.service.service_Provider;
 import si.feri.service.service_Station;
+import si.feri.iterators.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,14 +35,17 @@ public class Main {
             System.out.println("9️⃣ Delete Provider");
             System.out.println("🔟 Delete Station");
             System.out.println();
+            System.out.println("11 View Stations of Specific Provider");
+            System.out.println("12 View Stations Based on Connector Type ");
+            System.out.println();
             System.out.println("0️⃣ Exit");
             System.out.print("Enter choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> viewProviders();
-                case 2 -> viewStation();
+                case 1 -> listAllProviders();
+                case 2 -> listAllStations();
                 case 3 -> findProvider();
                 case 4 -> findStation();
                 case 5 -> addProvider();
@@ -50,6 +54,8 @@ public class Main {
                 case 8 -> updateStation();
                 case 9 -> deleteProvider();
                 case 10 -> deleteStation();
+                case 11 -> listStationsOfProvider();
+                case 12 -> listStationsOfProviderByType();
                 case 0 -> {
                     System.out.println("🚪 Exiting...");
                     scanner.close();
@@ -133,7 +139,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
-    private static void viewStation() {
+    private static void viewStations() {
         System.out.println("\n🔋 Stations:");
 
         try {
@@ -380,6 +386,51 @@ public class Main {
             station.deleteChargingStation(input);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    //  Iterators
+    private static void listStationsOfProvider() {
+        listProviders();
+        System.out.print("Enter Provider Name: ");
+        String input = scanner.nextLine();
+
+        provider.getProviderByName(input).ifPresent(providerName -> {
+            iterator_Station stationIterator = new iterator_Station(providerName.getListOfStations());
+
+            while (stationIterator.hasNext()) {
+                System.out.println(stationIterator.next());
+            }
+        });
+    }
+    private static void listStationsOfProviderByType() {
+        listProviders();
+        System.out.print("Enter Provider Name: ");
+        String providerInput = scanner.nextLine();
+
+        System.out.println("Enter Connector Type: " + Arrays.toString(enum_Connector.values()));
+        enum_Connector connectorTypeInput = enum_Connector.valueOf(scanner.nextLine().toUpperCase());
+
+        provider.getProviderByName(providerInput).ifPresent(providerName -> {
+           iterator_StationByConnectorType connectorType = new iterator_StationByConnectorType(providerName.getListOfStations(), connectorTypeInput);
+
+           while (connectorType.hasNext()) {
+               System.out.println(connectorType.next());
+           }
+        });
+    }
+    private static void listAllStations() {
+        iterator_StationsAll allStations = new iterator_StationsAll(provider.getProviders());
+
+        while (allStations.hasNext()) {
+            System.out.println(allStations.next());
+        }
+    }
+    private static void listAllProviders() {
+        iterator_Provider allProviders = new iterator_Provider(provider.getProviders());
+
+        while (allProviders.hasNext()) {
+            System.out.println(allProviders.next());
         }
     }
 }
