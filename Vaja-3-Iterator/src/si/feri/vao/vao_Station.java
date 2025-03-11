@@ -8,13 +8,15 @@ public class vao_Station {
     private enum_Connector connector;
     private String location;
     private boolean isAvailable;
+    private double chargingSpeed;
 
     //  constructors
-    public vao_Station(vao_Provider provider, enum_Connector connector, String location, boolean isAvailable) {
+    public vao_Station(vao_Provider provider, enum_Connector connector, String location, boolean isAvailable, double chargingSpeed) {
         this.provider = provider;
         this.connector = connector;
         this.location = location;
         this.isAvailable = isAvailable;
+        this.chargingSpeed = chargingSpeed;
     }
 
     //  setters
@@ -26,6 +28,9 @@ public class vao_Station {
         this.location = location; }
     public void setAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable; }
+    public void setChargingSpeed(double chargingSpeed) {
+        this.chargingSpeed = chargingSpeed;
+    }
 
     //  getters
     public vao_Provider getProvider() {
@@ -36,6 +41,9 @@ public class vao_Station {
         return location; }
     public boolean isAvailable() {
         return isAvailable; }
+    public double getChargingSpeed() {
+        return chargingSpeed;
+    }
 
     //  toString
     @Override
@@ -44,6 +52,7 @@ public class vao_Station {
                 "\t" + "Location: " + getLocation() + "\n" +
                 "\t" + "Connector: " + getConnector() + "\n" +
                 "\t" + "Available: " + isAvailable() + "\n" +
-                "\t" + "Provider: " + getProvider().getProviderName() + "\n";
+                "\t" + "Provider: " + getProvider().getProviderName() + "\n" +
+                "\t" + "Charging Speed: " + getChargingSpeed() + "kW." + "\n";
     }
 }

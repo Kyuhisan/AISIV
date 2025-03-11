@@ -20,23 +20,29 @@ public class Main {
         initializeData();
         while (true) {
             System.out.println("\n🔌 EV Charging Station System");
-            System.out.println("1️⃣ View Providers");
-            System.out.println("2️⃣ View Stations");
+            System.out.println("1. Show - All Providers");
+            System.out.println("2. Show - All Stations");
             System.out.println();
-            System.out.println("3️⃣ Find Provider");
-            System.out.println("4️⃣ Find Station");
+            System.out.println("3. Show - Specific Provider");
+            System.out.println("4. Show - Specific Station");
             System.out.println();
-            System.out.println("5️⃣ Add Provider ");
-            System.out.println("6️⃣ Add Station");
+            System.out.println("5. Add - Provider");
+            System.out.println("6. Add - Station");
             System.out.println();
-            System.out.println("7️⃣ Update Provider");
-            System.out.println("8️⃣ Update Station");
+            System.out.println("7. Update - Provider");
+            System.out.println("8. Update - Station");
             System.out.println();
-            System.out.println("9️⃣ Delete Provider");
-            System.out.println("🔟 Delete Station");
+            System.out.println("9. Delete - Provider");
+            System.out.println("10. Delete - Station");
             System.out.println();
-            System.out.println("11 View Stations of Specific Provider");
-            System.out.println("12 View Stations Based on Connector Type ");
+            System.out.println("11. Show - Stations of Specific Provider");
+            System.out.println("12. Show - Stations Based on Connector Type");
+            System.out.println();
+            System.out.println("13. Show - Active Stations");
+            System.out.println("14. Show - Stations With Charging Speed Above");
+            System.out.println();
+            System.out.println("15. Show - Stations In a Region");
+            System.out.println("16. Show - All Stations Ordered");
             System.out.println();
             System.out.println("0️⃣ Exit");
             System.out.print("Enter choice: ");
@@ -54,8 +60,12 @@ public class Main {
                 case 8 -> updateStation();
                 case 9 -> deleteProvider();
                 case 10 -> deleteStation();
-                case 11 -> listStationsOfProvider();
-                case 12 -> listStationsOfProviderByType();
+                case 11 -> listStationNamesOfProvider();
+                case 12 -> listStationNamesOfProviderByType();
+                case 13 -> listActiveStationsOfProvider();
+                case 14 -> listStationNamesBySpeedOfProvider();
+                case 15 -> listStationNamesByRegion();
+                case 16 -> listAllStationsInOrder();
                 case 0 -> {
                     System.out.println("🚪 Exiting...");
                     scanner.close();
@@ -66,6 +76,7 @@ public class Main {
         }
     }
 
+    //  Initial Setup
     private static void initializeData() {
         //  Creating Providers
         vao_Provider provider1 = new vao_Provider("Elektro Maribor", enum_Region.EUROPE);
@@ -80,16 +91,16 @@ public class Main {
         provider.addProvider(provider5);
 
         //  Creating Charging Stations
-        vao_Station station1 = new vao_Station(provider1, enum_Connector.TYPE2, "Maribor - Center", true);
-        vao_Station station2 = new vao_Station(provider1, enum_Connector.CCS, "Ljubljana - BTC", false);
-        vao_Station station3 = new vao_Station(provider2, enum_Connector.CHADEMO, "Kranj - Main Road", true);
-        vao_Station station4 = new vao_Station(provider2, enum_Connector.TYPE1, "Celje - South", true);
-        vao_Station station5 = new vao_Station(provider3, enum_Connector.TESLA, "San Francisco - Market St.", true);
-        vao_Station station6 = new vao_Station(provider3, enum_Connector.CCS, "Los Angeles - Hollywood Blvd.", false);
-        vao_Station station7 = new vao_Station(provider4, enum_Connector.DOMESTIC, "Tokyo - Shibuya", true);
-        vao_Station station8 = new vao_Station(provider4, enum_Connector.TYPE2, "Shanghai - Pudong", false);
-        vao_Station station9 = new vao_Station(provider5, enum_Connector.TYPE1, "Vienna - City Center", true);
-        vao_Station station10 = new vao_Station(provider5, enum_Connector.CCS, "Berlin - Alexanderplatz", true);
+        vao_Station station1 = new vao_Station(provider1, enum_Connector.TYPE2, "Maribor - Center", true, 50.2);
+        vao_Station station2 = new vao_Station(provider1, enum_Connector.CCS, "Ljubljana - BTC", false, 22.5);
+        vao_Station station3 = new vao_Station(provider2, enum_Connector.CHADEMO, "Kranj - Main Road", true, 15.0);
+        vao_Station station4 = new vao_Station(provider2, enum_Connector.TYPE1, "Celje - South", true, 77.0);
+        vao_Station station5 = new vao_Station(provider3, enum_Connector.TESLA, "San Francisco - Market St.", true, 12.5);
+        vao_Station station6 = new vao_Station(provider3, enum_Connector.CCS, "Los Angeles - Hollywood Blvd.", false, 22.5);
+        vao_Station station7 = new vao_Station(provider4, enum_Connector.DOMESTIC, "Tokyo - Shibuya", true, 34.44);
+        vao_Station station8 = new vao_Station(provider4, enum_Connector.TYPE2, "Shanghai - Pudong", false, 50.2);
+        vao_Station station9 = new vao_Station(provider5, enum_Connector.TYPE1, "Vienna - City Center", true, 77.0);
+        vao_Station station10 = new vao_Station(provider5, enum_Connector.CCS, "Berlin - Alexanderplatz", true, 22.5);
         station.addChargingStation(station1);
         station.addChargingStation(station2);
         station.addChargingStation(station3);
@@ -112,46 +123,48 @@ public class Main {
         provider5.getListOfStations().add(station9);
         provider5.getListOfStations().add(station10);
     }
-    private static void listProviders() {
+    private static void listProviderNames() {
         System.out.println("\nAvailable Providers:");
         try {
-            provider.getProviders().forEach(provider -> System.out.println("- " + provider.getProviderName()));
-        } catch (IllegalArgumentException e) {
+            iterator_Provider allProviders = new iterator_Provider(provider.getProviders());
+
+            while (allProviders.hasNext()) {
+                System.out.println(allProviders.next().getProviderName());
+            }        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
-    private static void listStations() {
+    private static void listStationNames() {
         System.out.println("\nAvailable Stations:");
         try {
-            station.getChargingStations().forEach(provider -> System.out.println("- " + provider.getLocation()));
-        } catch (IllegalArgumentException e) {
+            iterator_StationsAll allStations = new iterator_StationsAll(provider.getProviders());
+
+            while (allStations.hasNext()) {
+                System.out.println(allStations.next().getLocation());
+            }        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
     //  View Providers and Stations
-    private static void viewProviders() {
-        System.out.println("\n📌 Providers:");
+    private static void listAllProviders() {
+        iterator_Provider allProviders = new iterator_Provider(provider.getProviders());
 
-        try {
-            provider.getProviders().forEach(System.out::println);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        while (allProviders.hasNext()) {
+            System.out.println(allProviders.next());
         }
     }
-    private static void viewStations() {
-        System.out.println("\n🔋 Stations:");
+    private static void listAllStations() {
+        iterator_StationsAll allStations = new iterator_StationsAll(provider.getProviders());
 
-        try {
-            station.getChargingStations().forEach(System.out::println);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        while (allStations.hasNext()) {
+            System.out.println(allStations.next());
         }
     }
 
     //  Find Provider and Station
     private static void findProvider() {
-        listProviders();
+        listProviderNames();
         System.out.print("Enter Provider Name: ");
         String input = scanner.nextLine();
 
@@ -162,7 +175,7 @@ public class Main {
         }
     }
     private static void findStation() {
-        listStations();
+        listStationNames();
         System.out.print("Enter Station Location: ");
         String input = scanner.nextLine();
 
@@ -201,14 +214,16 @@ public class Main {
             enum_Connector connectorInput = enum_Connector.valueOf(scanner.nextLine().toUpperCase());
 
             try {
-                listProviders();
+                listProviderNames();
                 System.out.print("\nEnter Provider Name: ");
                 Optional<vao_Provider> providerInput = provider.getProviderByName(scanner.nextLine());
+                System.out.print("\nEnter Charging Speed: ");
+                double chargingSpeed = Double.parseDouble(scanner.nextLine());
 
                 if (providerInput.isEmpty()) {
                     throw new IllegalArgumentException("❌ Provider not found!");
                 }
-                vao_Station newStation = new vao_Station(providerInput.get(), connectorInput, locationInput, false);
+                vao_Station newStation = new vao_Station(providerInput.get(), connectorInput, locationInput, false, chargingSpeed);
 
                 try {
                     station.addChargingStation(newStation);
@@ -226,7 +241,7 @@ public class Main {
 
     //  Update Provider and Station
     private static void updateProvider() {
-        listProviders();
+        listProviderNames();
         System.out.print("Enter Provider Name to Update: ");
         String nameInput = scanner.nextLine();
         Optional<vao_Provider> optionalProvider = provider.getProviderByName(nameInput);
@@ -249,7 +264,7 @@ public class Main {
                 }
             }
 
-            listStations();
+            listStationNames();
             System.out.print("Enter Station to Add (or press Enter to skip): ");
             String stationLocation = scanner.nextLine();
             if (!stationLocation.isEmpty()) {
@@ -294,7 +309,7 @@ public class Main {
         }
     }
     private static void updateStation() {
-        listStations();
+        listStationNames();
         System.out.print("Enter Station Location to Update: ");
         String location = scanner.nextLine();
         Optional<vao_Station> optionalStation = station.getChargingStationByLocation(location);
@@ -327,7 +342,7 @@ public class Main {
                 }
             }
 
-            listProviders();
+            listProviderNames();
             System.out.print("Enter New Provider Name (or press Enter to keep current): ");
             String newProviderName = scanner.nextLine();
             if (!newProviderName.isEmpty()) {
@@ -367,7 +382,7 @@ public class Main {
 
     //  Delete Provider and Station
     private static void deleteProvider() {
-        listProviders();
+        listProviderNames();
         System.out.print("Enter Provider Name to Delete: ");
         String input = scanner.nextLine();
 
@@ -378,7 +393,7 @@ public class Main {
         }
     }
     private static void deleteStation() {
-        listStations();
+        listStationNames();
         System.out.print("Enter Station Location to Delete: ");
         String input = scanner.nextLine();
 
@@ -390,8 +405,8 @@ public class Main {
     }
 
     //  Iterators
-    private static void listStationsOfProvider() {
-        listProviders();
+    private static void listStationNamesOfProvider() {
+        listProviderNames();
         System.out.print("Enter Provider Name: ");
         String input = scanner.nextLine();
 
@@ -403,8 +418,8 @@ public class Main {
             }
         });
     }
-    private static void listStationsOfProviderByType() {
-        listProviders();
+    private static void listStationNamesOfProviderByType() {
+        listProviderNames();
         System.out.print("Enter Provider Name: ");
         String providerInput = scanner.nextLine();
 
@@ -419,18 +434,57 @@ public class Main {
            }
         });
     }
-    private static void listAllStations() {
-        iterator_StationsAll allStations = new iterator_StationsAll(provider.getProviders());
+    private static void listActiveStationsOfProvider() {
+        listProviderNames();
+        System.out.print("Enter Provider Name: ");
+        String providerInput = scanner.nextLine();
+
+        provider.getProviderByName(providerInput).ifPresent(providerName -> {
+            iterator_StationsActive isActive = new iterator_StationsActive(providerName.getListOfStations(), true);
+
+            while (isActive.hasNext()) {
+                System.out.println(isActive.next());
+            }
+        });
+    }
+    private static void listStationNamesBySpeedOfProvider() {
+        listProviderNames();
+        System.out.print("Enter Provider Name: ");
+        String providerInput = scanner.nextLine();
+
+        System.out.print("Enter Charging Speed: ");
+        double speedInput = Double.parseDouble(scanner.nextLine());
+
+        provider.getProviderByName(providerInput).ifPresent(providerName -> {
+            iterator_StationsBySpeed bySpeed = new iterator_StationsBySpeed(providerName.getListOfStations(), speedInput);
+
+            while (bySpeed.hasNext()) {
+                System.out.println(bySpeed.next());
+            }
+        });
+    }
+    private static void listStationNamesByRegion() {
+        listProviderNames();
+        System.out.print("Enter Provider Name: ");
+        String providerInput = scanner.nextLine();
+
+
+        System.out.print("Enter Active Region " + Arrays.toString(enum_Region.values()) + ": ");
+        enum_Region regionInput = enum_Region.valueOf(scanner.nextLine());
+
+        provider.getProviderByName(providerInput).ifPresent(providerName -> {
+            iterator_StationsByRegion byRegion = new iterator_StationsByRegion(providerName.getListOfStations(), regionInput);
+
+            while (byRegion.hasNext()) {
+                System.out.println(byRegion.next());
+            }
+        });
+    }
+    private static void listAllStationsInOrder() {
+        iterator_StationsAllOrdered allStations = new iterator_StationsAllOrdered(provider.getProviders());
 
         while (allStations.hasNext()) {
             System.out.println(allStations.next());
-        }
-    }
-    private static void listAllProviders() {
-        iterator_Provider allProviders = new iterator_Provider(provider.getProviders());
-
-        while (allProviders.hasNext()) {
-            System.out.println(allProviders.next());
         }
     }
 }
