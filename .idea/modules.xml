@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/Vaja-1-Charging-Station/Vaja-1-Charging-Station.iml" filepath="$PROJECT_DIR$/Vaja-1-Charging-Station/Vaja-1-Charging-Station.iml" />
       <module fileurl="file://$PROJECT_DIR$/Vaja-2-Singleton/Vaja-2-Singleton.iml" filepath="$PROJECT_DIR$/Vaja-2-Singleton/Vaja-2-Singleton.iml" />
       <module fileurl="file://$PROJECT_DIR$/Vaja-3-Iterator/Vaja-3-Iterator.iml" filepath="$PROJECT_DIR$/Vaja-3-Iterator/Vaja-3-Iterator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Vaja-4-Observer/Vaja-4-Observer.iml" filepath="$PROJECT_DIR$/Vaja-4-Observer/Vaja-4-Observer.iml" />
     </modules>
   </component>
 </project>
