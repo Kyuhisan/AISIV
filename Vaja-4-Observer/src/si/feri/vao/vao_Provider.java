@@ -23,25 +23,19 @@ public class vao_Provider {
 
     //  getters
     public String getProviderName() {
-        return providerName;
-    }
+        return providerName; }
     public List<vao_Station> getListOfStations() {
-        return listOfStations;
-    }
+        return listOfStations; }
     public enum_Region getActiveRegion() {
-        return activeRegion;
-    }
+        return activeRegion; }
 
     //  setters
     public void setProviderName(String providerName) {
-        this.providerName = providerName;
-    }
+        this.providerName = providerName; }
     public void setActiveRegion(enum_Region activeRegion) {
-        this.activeRegion = activeRegion;
-    }
+        this.activeRegion = activeRegion; }
     public void setListOfStations(List<vao_Station> listOfStations) {
-        this.listOfStations = listOfStations;
-    }
+        this.listOfStations = listOfStations; }
 
     //  adding / removing methods
     public void addStation(vao_Station station) {
@@ -56,11 +50,9 @@ public class vao_Provider {
 
     //  observers
     public void addObserver(observer_Provider observer) {
-        providerObservers.add(observer);
-    }
+        providerObservers.add(observer); }
     public void removeObserver(observer_Provider observer) {
-        providerObservers.remove(observer);
-    }
+        providerObservers.remove(observer); }
     public void notifyObservers(vao_Station station, String action) {
         for (observer_Provider observer : providerObservers) {
             observer.update(this, station, action);

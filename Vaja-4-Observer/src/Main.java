@@ -36,18 +36,18 @@ public class Main {
             System.out.println();
             System.out.println("9. Delete - Provider");
             System.out.println("10. Delete - Station");
-            System.out.println();
+            System.out.println("Iterators");
             System.out.println("11. Show - Stations of Specific Provider");
             System.out.println("12. Show - Stations Based on Connector Type");
-            System.out.println();
             System.out.println("13. Show - Active Stations");
             System.out.println("14. Show - Stations With Charging Speed Above");
-            System.out.println();
             System.out.println("15. Show - Stations In a Region");
             System.out.println("16. Show - All Stations Ordered");
-            System.out.println();
+            System.out.println("Observers");
             System.out.println("17. Add - Station to Provider");
             System.out.println("18. Remove - Station from Provider");
+            System.out.println("19. Start Charging");
+            System.out.println("20. Stop Charging");
             System.out.println();
             System.out.println("0️⃣ Exit");
             System.out.print("Enter choice: ");
@@ -73,6 +73,8 @@ public class Main {
                 case 16 -> listAllStationsInOrder();
                 case 17 -> addStation();
                 case 18 -> removeStation();
+                case 19 -> startCharging();
+                case 20 -> stopCharging();
                 case 0 -> {
                     System.out.println("🚪 Exiting...");
                     scanner.close();
@@ -536,7 +538,6 @@ public class Main {
             System.out.println("❌ Provider not valid! Please enter a valid provider from the list.");
         }
     }
-
     private static void removeStation() {
         try {
             listProviderNames();
@@ -553,5 +554,28 @@ public class Main {
         } catch (IllegalArgumentException e) {
             System.out.println("❌ Provider not valid! Please enter a valid provider from the list.");
         }
+    }
+
+    private static void startCharging() {
+        listAllStations();
+        System.out.print("\nEnter Charging Station: ");
+        Optional<vao_Station> stationInput = station.getChargingStationByLocation(scanner.nextLine());
+
+        stationInput.ifPresent(station -> {
+            stationInput.get().setAvailable(false);
+            stationInput.get().setCurrentUserEmail("currentUser1@gmail.com");
+        });
+    }
+    private static void stopCharging() {
+        listAllStations();
+        System.out.print("\nEnter Charging Station: ");
+        Optional<vao_Station> stationInput = station.getChargingStationByLocation(scanner.nextLine());
+
+        stationInput.ifPresent(station -> {
+            if (!station.isAvailable()) {
+                stationInput.get().setAvailable(true);
+                stationInput.get().setCurrentUserEmail(null);
+            }
+        });
     }
 }

@@ -9,6 +9,7 @@ public class vao_Station {
     private String location;
     private boolean isAvailable;
     private double chargingSpeed;
+    private String currentUserEmail;
 
     //  constructors
     public vao_Station(vao_Provider provider, enum_Connector connector, String location, boolean isAvailable, double chargingSpeed) {
@@ -29,8 +30,9 @@ public class vao_Station {
     public void setAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable; }
     public void setChargingSpeed(double chargingSpeed) {
-        this.chargingSpeed = chargingSpeed;
-    }
+        this.chargingSpeed = chargingSpeed; }
+    public void setCurrentUserEmail(String currentUserEmail) {
+        this.currentUserEmail = currentUserEmail; }
 
     //  getters
     public vao_Provider getProvider() {
@@ -42,8 +44,9 @@ public class vao_Station {
     public boolean isAvailable() {
         return isAvailable; }
     public double getChargingSpeed() {
-        return chargingSpeed;
-    }
+        return chargingSpeed; }
+    public String getCurrentUserEmail() {
+        return currentUserEmail; }
 
     //  toString
     @Override
@@ -53,6 +56,7 @@ public class vao_Station {
                 "\t" + "Connector: " + getConnector() + "\n" +
                 "\t" + "Available: " + isAvailable() + "\n" +
                 "\t" + "Provider: " + getProvider().getProviderName() + "\n" +
-                "\t" + "Charging Speed: " + getChargingSpeed() + "kW." + "\n";
+                "\t" + "Charging Speed: " + getChargingSpeed() + "kW." + "\n" +
+                "\t" + "Active User: " + getCurrentUserEmail() + "\n";
     }
 }
