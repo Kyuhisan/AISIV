@@ -1,5 +1,6 @@
 package si.feri.iterators;
 
+import si.feri.observers.observer_StationsAvailabilityStatus_Notifier;
 import si.feri.vao.vao_Provider;
 import si.feri.vao.vao_Station;
 
@@ -30,4 +31,5 @@ public class iterator_StationsAll implements Iterator<vao_Station> {
     public vao_Station next() {
         return iterator.next();
     }
+
 }

@@ -12,7 +12,6 @@ public class vao_Provider {
     private String providerName;
     private List<vao_Station> listOfStations;
     private enum_Region activeRegion;
-    private final List<observer_Provider> providerObservers = new ArrayList<>();
 
     //  constructors
     public vao_Provider(String providerName, enum_Region activeRegion) {
@@ -36,28 +35,6 @@ public class vao_Provider {
         this.activeRegion = activeRegion; }
     public void setListOfStations(List<vao_Station> listOfStations) {
         this.listOfStations = listOfStations; }
-
-    //  adding / removing methods
-    public void addStation(vao_Station station) {
-        listOfStations.add(station);
-        notifyObservers(station, "added");
-    }
-
-    public void removeStation(vao_Station station) {
-        listOfStations.remove(station);
-        notifyObservers(station, "removed");
-    }
-
-    //  observers
-    public void addObserver(observer_Provider observer) {
-        providerObservers.add(observer); }
-    public void removeObserver(observer_Provider observer) {
-        providerObservers.remove(observer); }
-    public void notifyObservers(vao_Station station, String action) {
-        for (observer_Provider observer : providerObservers) {
-            observer.update(this, station, action);
-        }
-    }
 
     //  toString
     @Override

@@ -1,5 +1,7 @@
-import si.feri.observers.observer_ProviderAddStation;
-import si.feri.observers.observer_ProviderRemoveStation;
+import si.feri.observers.observer_ProviderStationStatus_Notifier;
+import si.feri.observers.observer_Station;
+import si.feri.observers.observer_StationsAvailabilityStatus_Notifier;
+import si.feri.observers.observer_UserCharging_Notifier;
 import si.feri.vao.vao_Station;
 import si.feri.enums.enum_Connector;
 import si.feri.vao.vao_Provider;
@@ -8,10 +10,7 @@ import si.feri.service.service_Provider;
 import si.feri.service.service_Station;
 import si.feri.iterators.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -28,27 +27,28 @@ public class Main {
             System.out.println("3. Show - Specific Provider");
             System.out.println("4. Show - Specific Station");
             System.out.println();
-            System.out.println("5. Create - Provider");
-            System.out.println("6. Create - Station");
+            System.out.println("5. Add - Provider");
+            System.out.println("6. Add - Station");
             System.out.println();
             System.out.println("7. Update - Provider");
             System.out.println("8. Update - Station");
             System.out.println();
             System.out.println("9. Delete - Provider");
             System.out.println("10. Delete - Station");
-            System.out.println("Iterators");
+            System.out.println();
             System.out.println("11. Show - Stations of Specific Provider");
             System.out.println("12. Show - Stations Based on Connector Type");
+            System.out.println();
             System.out.println("13. Show - Active Stations");
             System.out.println("14. Show - Stations With Charging Speed Above");
+            System.out.println();
             System.out.println("15. Show - Stations In a Region");
             System.out.println("16. Show - All Stations Ordered");
-            System.out.println("Observers");
-            System.out.println("17. Add - Station to Provider");
-            System.out.println("18. Remove - Station from Provider");
-            System.out.println("19. Start Charging");
-            System.out.println("20. Stop Charging");
             System.out.println();
+            System.out.println("17. Start Charging");
+            System.out.println("18. Stop Charging");
+            System.out.println("19. Show Charging Station Availability");
+
             System.out.println("0️⃣ Exit");
             System.out.print("Enter choice: ");
             int choice = scanner.nextInt();
@@ -59,8 +59,8 @@ public class Main {
                 case 2 -> listAllStations();
                 case 3 -> findProvider();
                 case 4 -> findStation();
-                case 5 -> createProvider();
-                case 6 -> createStation();
+                case 5 -> addProvider();
+                case 6 -> addStation();
                 case 7 -> updateProvider();
                 case 8 -> updateStation();
                 case 9 -> deleteProvider();
@@ -71,10 +71,9 @@ public class Main {
                 case 14 -> listStationNamesBySpeedOfProvider();
                 case 15 -> listStationNamesByRegion();
                 case 16 -> listAllStationsInOrder();
-                case 17 -> addStation();
-                case 18 -> removeStation();
-                case 19 -> startCharging();
-                case 20 -> stopCharging();
+                case 17 -> startCharging();
+                case 18 -> stopCharging();
+                case 19 -> showAllStationsAvailability();
                 case 0 -> {
                     System.out.println("🚪 Exiting...");
                     scanner.close();
@@ -93,19 +92,6 @@ public class Main {
         vao_Provider provider3 = new vao_Provider("Tesla Superchargers", enum_Region.AMERICA);
         vao_Provider provider4 = new vao_Provider("Shell Recharge", enum_Region.ASIA);
         vao_Provider provider5 = new vao_Provider("Green Energy", enum_Region.EUROPE);
-
-        //  Initialize observers
-        provider1.addObserver(new observer_ProviderAddStation());
-        provider1.addObserver(new observer_ProviderRemoveStation());
-        provider2.addObserver(new observer_ProviderAddStation());
-        provider2.addObserver(new observer_ProviderRemoveStation());
-        provider3.addObserver(new observer_ProviderAddStation());
-        provider3.addObserver(new observer_ProviderRemoveStation());
-        provider4.addObserver(new observer_ProviderAddStation());
-        provider4.addObserver(new observer_ProviderRemoveStation());
-        provider5.addObserver(new observer_ProviderAddStation());
-        provider5.addObserver(new observer_ProviderRemoveStation());
-
         provider.addProvider(provider1);
         provider.addProvider(provider2);
         provider.addProvider(provider3);
@@ -123,7 +109,6 @@ public class Main {
         vao_Station station8 = new vao_Station(provider4, enum_Connector.TYPE2, "Shanghai - Pudong", false, 50.2);
         vao_Station station9 = new vao_Station(provider5, enum_Connector.TYPE1, "Vienna - City Center", true, 77.0);
         vao_Station station10 = new vao_Station(provider5, enum_Connector.CCS, "Berlin - Alexanderplatz", true, 22.5);
-
         station.addChargingStation(station1);
         station.addChargingStation(station2);
         station.addChargingStation(station3);
@@ -296,7 +281,7 @@ public class Main {
     }
 
     //  Add Provider and Station
-    private static void createProvider() {
+    private static void addProvider() {
         System.out.print("Enter Provider Name: ");
         String nameInput = scanner.nextLine();
 
@@ -314,7 +299,7 @@ public class Main {
             System.out.println("❌ Invalid region! Please enter a valid option.");
         }
     }
-    private static void createStation() {
+    private static void addStation() {
         System.out.print("Enter Station Location: ");
         String locationInput = scanner.nextLine();
 
@@ -513,69 +498,55 @@ public class Main {
         }
     }
 
-    //  Adding and removing stations to Provider's list of stations
-    private static void addStation() {
-        try {
-            listProviderNames();
-            System.out.print("\nEnter Provider Name: ");
-            Optional<vao_Provider> providerInput = provider.getProviderByName(scanner.nextLine());
+    //  Charging Stations Availability
+    private static void showAllStationsAvailability() {
+        iterator_StationsAll allStations = new iterator_StationsAll(provider.getProviders());
+        vao_Station currentStation;
 
-            System.out.println("\nAvailable Stations:");
-            try {
-                iterator_StationsAll allStations = new iterator_StationsAll(provider.getProviders());
-                while (allStations.hasNext()) {
-                    System.out.println(allStations.next().getLocation());
-                }
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-
-            Optional<vao_Station> stationInput = station.getChargingStationByLocation(scanner.nextLine());
-            providerInput.ifPresent(providerName -> {
-                stationInput.ifPresent(providerName::addStation);
-            });
-        } catch (IllegalArgumentException e) {
-            System.out.println("❌ Provider not valid! Please enter a valid provider from the list.");
+        while (allStations.hasNext()) {
+            currentStation = allStations.next();
+            currentStation.addObserver(new observer_StationsAvailabilityStatus_Notifier());
+            currentStation.getStationsAvailabilityStatus(currentStation);
         }
     }
-    private static void removeStation() {
-        try {
-            listProviderNames();
-            System.out.print("\nEnter Provider Name: ");
-            Optional<vao_Provider> providerInput = provider.getProviderByName(scanner.nextLine());
-
-            System.out.println("\nAvailable Stations:");
-            providerInput.ifPresent(providerName -> {
-                providerName.getListOfStations().forEach(provider -> System.out.println("- " + provider.getLocation()));
-                Optional<vao_Station> stationInput = station.getChargingStationByLocation(scanner.nextLine());
-
-                stationInput.ifPresent(providerName::removeStation);
-            });
-        } catch (IllegalArgumentException e) {
-            System.out.println("❌ Provider not valid! Please enter a valid provider from the list.");
-        }
-    }
-
     private static void startCharging() {
-        listAllStations();
-        System.out.print("\nEnter Charging Station: ");
-        Optional<vao_Station> stationInput = station.getChargingStationByLocation(scanner.nextLine());
+        listStationNames();  // Display available stations
+        System.out.print("Enter Station Location: ");
+        String location = scanner.nextLine();
 
-        stationInput.ifPresent(station -> {
-            stationInput.get().setAvailable(false);
-            stationInput.get().setCurrentUserEmail("currentUser1@gmail.com");
-        });
+        Optional<vao_Station> optionalStation = station.getChargingStationByLocation(location);
+
+        if (optionalStation.isPresent()) {
+            vao_Station currentStation = optionalStation.get();
+
+            System.out.print("Enter User Email: ");
+            String userEmail = scanner.nextLine();
+            currentStation.setCurrentUserEmail(userEmail);
+
+            currentStation.addObserver(new observer_UserCharging_Notifier());
+            currentStation.addObserver(new observer_ProviderStationStatus_Notifier());
+            currentStation.startCharging(currentStation, userEmail);
+        } else {
+            System.out.println("❌ Charging Station not found!");
+        }
     }
     private static void stopCharging() {
-        listAllStations();
-        System.out.print("\nEnter Charging Station: ");
-        Optional<vao_Station> stationInput = station.getChargingStationByLocation(scanner.nextLine());
+        System.out.print("Enter User Email: ");
+        String userEmail = scanner.nextLine();
 
-        stationInput.ifPresent(station -> {
-            if (!station.isAvailable()) {
-                stationInput.get().setAvailable(true);
-                stationInput.get().setCurrentUserEmail(null);
+        for (vao_Provider provider : provider.getProviders()) {
+            iterator_StationByEmail stationIterator = new iterator_StationByEmail(provider.getListOfStations(), userEmail);
+
+            if (stationIterator.hasNext()) {
+                vao_Station myStation = stationIterator.next();
+
+                myStation.addObserver(new observer_UserCharging_Notifier());
+                myStation.addObserver(new observer_ProviderStationStatus_Notifier());
+                myStation.stopCharging(myStation);
+                myStation.setCurrentUserEmail(null);
+                return;
             }
-        });
+        }
+        System.out.println("❌ No active charging session found for " + userEmail);
     }
 }
