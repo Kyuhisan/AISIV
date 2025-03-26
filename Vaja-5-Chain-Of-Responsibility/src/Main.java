@@ -162,11 +162,11 @@ public class Main {
         provider5.getListOfStations().add(station9);
         provider5.getListOfStations().add(station10);
 
-        vao_User user1 = new vao_User("Matic Kuhar", "matickuhar@gmail.com", 125.22, enum_CarType.GAS);
-        vao_User user2 = new vao_User("Peter Kotnik", "peterkotnik@gmail.com", -25.2, enum_CarType.ELECTRIC);
-        vao_User user3 = new vao_User("Janez Pleče", "janezplece@gmail.com", 0, enum_CarType.ELECTRIC);
-        vao_User user4 = new vao_User("Aleš Kokot", "aleskokot@gmail.com", 0, enum_CarType.DIESEL);
-        vao_User user5 = new vao_User("Nejc Petrič", "nejcpetric@gmail.com", 241.22, enum_CarType.GASOLINE);
+        vao_User user1 = new vao_User("Matic Kuhar", "positiveNonElectric@gmail.com", 125.22, enum_CarType.GAS);
+        vao_User user2 = new vao_User("Peter Kotnik", "negativeElectric@gmail.com", -25.2, enum_CarType.ELECTRIC);
+        vao_User user3 = new vao_User("Janez Pleče", "zeroElectric@gmail.com", 0, enum_CarType.ELECTRIC);
+        vao_User user4 = new vao_User("Aleš Kokot", "zeroNonElectric@gmail.com", 0, enum_CarType.DIESEL);
+        vao_User user5 = new vao_User("Nejc Petrič", "positiveElectric@gmail.com", 241.22, enum_CarType.ELECTRIC);
 
         user.addUser(user1);
         user.addUser(user2);

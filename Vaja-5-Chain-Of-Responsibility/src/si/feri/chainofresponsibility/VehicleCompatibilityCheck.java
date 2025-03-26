@@ -12,13 +12,12 @@ public class VehicleCompatibilityCheck implements UserHandler {
     }
 
     @Override
-    public void handleRequest(vao_User user) {
-        if (user.getCarType().equals(enum_CarType.ELECTRIC)) {
-            System.out.println("Car type of user is valid!");
-            return;
+    public boolean handleRequest(vao_User user) {
+        if (!user.getCarType().equals(enum_CarType.ELECTRIC)) {
+            System.out.println("❌ Vehicle type not compatible.");
+            return false;
         }
-        if (next != null) {
-            next.handleRequest(user);
-        }
+        System.out.println("✅ Vehicle compatibility check passed.");
+        return next == null || next.handleRequest(user);
     }
 }

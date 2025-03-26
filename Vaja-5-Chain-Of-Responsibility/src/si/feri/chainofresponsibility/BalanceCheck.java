@@ -11,13 +11,13 @@ public class BalanceCheck implements UserHandler {
     }
 
     @Override
-    public void handleRequest(vao_User user) {
-        if (user.getBalance() >= 0) {
-            System.out.println("User's balance is sufficient!");
-            return;
+    public boolean handleRequest(vao_User user) {
+        if (user.getBalance() < 0) {
+            System.out.println("❌ User does not have sufficient balance.");
+            return false;
         }
-        if (next != null) {
-            next.handleRequest(user);
-        }
+        System.out.println("✅ Balance check passed.");
+        return next == null || next.handleRequest(user);
     }
 }
+
