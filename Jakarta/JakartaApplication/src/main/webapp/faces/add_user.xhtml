@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:body>
+    <h:form>
+        <h2>New Charging Station User</h2>
+
+        <h:outputLabel value="Email:" for="email" />
+        <h:inputText id="email" value="#{addUser.user.email}" /><br/>
+
+        <h:outputLabel value="Name:" for="name" />
+        <h:inputText id="name" value="#{addUser.user.name}" /><br/>
+
+        <h:outputLabel value="Car Type:" for="carType" />
+        <h:selectOneMenu id="carType" value="#{addUser.user.carType}">
+            <f:selectItems value="#{addUser.carTypes}" var="ct"
+                           itemValue="#{ct}" itemLabel="#{ct}" />
+        </h:selectOneMenu><br/>
+
+        <h:outputLabel value="Balance:" for="balance" />
+        <h:inputText id="balance" value="#{addUser.user.balance}" /><br/><br/>
+
+        <h:commandButton value="Add User" action="#{addUser.addUser}" />
+    </h:form>
+</h:body>
+</html>
