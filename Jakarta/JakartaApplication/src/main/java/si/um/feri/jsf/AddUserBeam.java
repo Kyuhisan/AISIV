@@ -23,7 +23,7 @@ public class AddUserBeam implements Serializable {
     public void addUser() {
         userService.addUser(user);
         System.out.println("✅ User added: " + user);
-        user = new UserVao(); // Reset form
+        user = new UserVao();
     }
 
     public carTypeENUM[] getCarTypes() {
