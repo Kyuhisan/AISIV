@@ -20,7 +20,11 @@ public class ChargingStationVao {
     private List<ChargingStationObserver> stationObservers = new ArrayList<>();
 
     //  constructors
+    public ChargingStationVao() {
+
+    }
     public ChargingStationVao(ProviderVao provider, connectorENUM connector, String location, boolean isAvailable, double chargingSpeed) {
+        this();
         this.providerVao = provider;
         this.connector = connector;
         this.location = location;

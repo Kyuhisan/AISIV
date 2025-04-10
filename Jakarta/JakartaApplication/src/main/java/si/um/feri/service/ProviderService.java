@@ -3,10 +3,12 @@ package si.um.feri.service;
 import si.um.feri.dao.ProviderDao;
 import si.um.feri.dao.interfaces.ProviderIDao;
 import si.um.feri.vao.ProviderVao;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public class ProviderService {
+public class ProviderService implements Serializable {
     private final ProviderIDao dao_provider = ProviderDao.getInstance();
 
     //  create

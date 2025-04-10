@@ -48,6 +48,11 @@ public class InitialDataBean {
         ChargingStationVao station8 = new ChargingStationVao(provider4, connectorENUM.TYPE2, "Shanghai - Pudong", false, 50.2);
         ChargingStationVao station9 = new ChargingStationVao(provider5, connectorENUM.TYPE1, "Vienna - City Center", true, 77.0);
         ChargingStationVao station10 = new ChargingStationVao(provider5, connectorENUM.CCS, "Berlin - Alexanderplatz", true, 22.5);
+        station2.setCurrentUserEmail("matickuhar@gmail.com");
+        station6.setCurrentUserEmail("janezplece@gmail.com");
+        station5.setCurrentUserEmail("aleskokot@gmail.com");
+        station4.setCurrentUserEmail("nejcpetric@gmail.com");
+        station1.setCurrentUserEmail("peterkotnik@gmail.com");
         chargingStation.addChargingStation(station1);
         chargingStation.addChargingStation(station2);
         chargingStation.addChargingStation(station3);
@@ -70,11 +75,11 @@ public class InitialDataBean {
         provider5.getListOfStations().add(station9);
         provider5.getListOfStations().add(station10);
 
-        UserVao user1 = new UserVao("Matic Kuhar", "positiveNonElectric@gmail.com", 125.22, carTypeENUM.GAS);
-        UserVao user2 = new UserVao("Peter Kotnik", "negativeElectric@gmail.com", -25.2, carTypeENUM.ELECTRIC);
-        UserVao user3 = new UserVao("Janez Pleče", "zeroElectric@gmail.com", 0, carTypeENUM.ELECTRIC);
-        UserVao user4 = new UserVao("Aleš Kokot", "zeroNonElectric@gmail.com", 0, carTypeENUM.DIESEL);
-        UserVao user5 = new UserVao("Nejc Petrič", "positiveElectric@gmail.com", 241.22, carTypeENUM.ELECTRIC);
+        UserVao user1 = new UserVao("Matic Kuhar", "matickuhar@gmail.com", 125.22, carTypeENUM.GAS);
+        UserVao user2 = new UserVao("Peter Kotnik", "peterkotnik@gmail.com", -25.2, carTypeENUM.ELECTRIC);
+        UserVao user3 = new UserVao("Janez Pleče", "janezplece@gmail.com", 0, carTypeENUM.ELECTRIC);
+        UserVao user4 = new UserVao("Aleš Kokot", "aleskokot@gmail.com", 0, carTypeENUM.DIESEL);
+        UserVao user5 = new UserVao("Nejc Petrič", "nejcpetric@gmail.com", 241.22, carTypeENUM.ELECTRIC);
         user.addUser(user1);
         user.addUser(user2);
         user.addUser(user3);

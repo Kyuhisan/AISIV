@@ -3,10 +3,12 @@ package si.um.feri.service;
 import si.um.feri.dao.ChargingStationDao;
 import si.um.feri.dao.interfaces.ChargingStationIDao;
 import si.um.feri.vao.ChargingStationVao;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public class ChargingStationService {
+public class ChargingStationService implements Serializable {
     private final ChargingStationIDao dao_station = ChargingStationDao.getInstance();
 
     //  create

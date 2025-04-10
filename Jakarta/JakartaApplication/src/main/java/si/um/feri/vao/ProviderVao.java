@@ -16,7 +16,11 @@ public class ProviderVao {
     private regionENUM activeRegion;
 
     //  constructors
+    public ProviderVao() {
+
+    }
     public ProviderVao(String providerName, regionENUM activeRegion) {
+        this();
         this.providerName = providerName;
         this.listOfStations = new ArrayList<>();
         this.activeRegion = activeRegion;

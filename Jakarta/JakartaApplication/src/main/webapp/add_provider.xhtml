@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view>
+        <h:body>
+            <h:form>
+                <h2>New Provider</h2>
+
+                <h:outputLabel value="Provider Name:" for="providerName" />
+                <h:inputText id="providerName" value="#{addProvider.provider.providerName}" /><br/>
+
+                <h:outputLabel value="Provider Region:" for="region" />
+                <h:selectOneMenu id="region" value="#{addProvider.provider.activeRegion}">
+                    <f:selectItems value="#{addProvider.regions}" var="reg"
+                                   itemValue="#{reg}" itemLabel="#{reg}" />
+                </h:selectOneMenu><br/>
+
+                <h:commandButton value="Add Provider" action="#{addProvider.addProvider}" />
+            </h:form>
+        </h:body>
+    </f:view>
+</html>

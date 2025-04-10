@@ -4,14 +4,17 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import si.um.feri.service.ProviderService;
+import si.um.feri.vao.ProviderVao;
+import java.util.List;
 
 @Named("showProviders")
 @RequestScoped
 public class ShowProviders {
     @Inject
-    private ProviderService providerService;
+    ProviderService providerService;
 
-    public void printToConsole() {
-        providerService.getProviders().forEach(System.out::println);
+    public List<ProviderVao> getProviders() {
+        return providerService.getProviders();
     }
 }
+
