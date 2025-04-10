@@ -16,5 +16,19 @@ public class ShowProviders {
     public List<ProviderVao> getProviders() {
         return providerService.getProviders();
     }
+
+    private String selectedProvider;
+
+    public void removeProvider() {
+        providerService.deleteProvider(selectedProvider);
+    }
+
+    public String getSelectedProvider() {
+        return selectedProvider;
+    }
+
+    public void setSelectedProvider(String selectedProvider) {
+        this.selectedProvider = selectedProvider;
+    }
 }
 

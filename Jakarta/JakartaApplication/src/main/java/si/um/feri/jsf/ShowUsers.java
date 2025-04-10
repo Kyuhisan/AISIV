@@ -16,6 +16,20 @@ public class ShowUsers {
     public List<UserVao> getUsers() {
         return userService.getUsers();
     }
+
+    private String selectedEmail;
+
+    public void removeUser() {
+        userService.deleteUser(selectedEmail);
+    }
+
+    public String getSelectedEmail() {
+        return selectedEmail;
+    }
+
+    public void setSelectedEmail(String selectedEmail) {
+        this.selectedEmail = selectedEmail;
+    }
 }
 
 

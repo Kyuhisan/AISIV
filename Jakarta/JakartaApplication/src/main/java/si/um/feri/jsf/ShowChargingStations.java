@@ -16,6 +16,18 @@ public class ShowChargingStations {
     public List<ChargingStationVao> getStations() {
         return stationService.getChargingStations();
     }
+
+    private String selectedStation;
+    public void removeStation() {
+        stationService.deleteChargingStation(selectedStation);
+    }
+    public String getSelectedStation() {
+        return selectedStation;
+    }
+
+    public void setSelectedStation(String selectedStation) {
+        this.selectedStation = selectedStation;
+    }
 }
 
 
