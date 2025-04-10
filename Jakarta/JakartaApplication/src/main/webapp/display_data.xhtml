@@ -1,90 +1,92 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<h:head>
-    <meta charset="UTF-8" />
-    <title>Charging Station Overview</title>
-</h:head>
+    <ui:composition template="/WEB-INF/template/template.xhtml">
+        <ui:define name="title">
+            Dashboard
+        </ui:define>
 
-<h:body>
-    <h1>🚗 Charging Station Dashboard</h1>
-    <h:form>
-        <p:panel header="📦 Providers">
-            <p:dataTable value="#{showProviders.providers}" var="provider"
-                         paginator="true" rows="5"
-                         rendered="#{not empty showProviders.providers}">
+        <ui:define name="content">
+            <h:body>
+                <h1>🚗 Charging Station Dashboard</h1>
+                <h:form>
+                    <p:panel header="📦 Providers">
+                        <p:dataTable value="#{showProviders.providers}" var="provider"
+                                     paginator="true" rows="5"
+                                     rendered="#{not empty showProviders.providers}">
 
-                <p:column headerText="Name">
-                    <h:outputText value="#{provider.providerName}" />
-                </p:column>
+                            <p:column headerText="Name">
+                                <h:outputText value="#{provider.providerName}" />
+                            </p:column>
 
-                <p:column headerText="Region">
-                    <h:outputText value="#{provider.activeRegion}" />
-                </p:column>
+                            <p:column headerText="Region">
+                                <h:outputText value="#{provider.activeRegion}" />
+                            </p:column>
 
-                <p:column headerText="Stations Count">
-                    <h:outputText value="#{provider.listOfStations.size()}" />
-                </p:column>
-            </p:dataTable>
-        </p:panel>
+                            <p:column headerText="Stations Count">
+                                <h:outputText value="#{provider.listOfStations.size()}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
 
-        <p:panel header="⚡ Charging Stations">
-            <p:dataTable value="#{showChargingStations.stations}" var="station"
-                         paginator="true" rows="5"
-                         rendered="#{not empty showChargingStations.stations}">
+                    <p:panel header="⚡ Charging Stations">
+                        <p:dataTable value="#{showChargingStations.stations}" var="station"
+                                     paginator="true" rows="5"
+                                     rendered="#{not empty showChargingStations.stations}">
 
-                <p:column headerText="Location">
-                    <h:outputText value="#{station.location}" />
-                </p:column>
+                            <p:column headerText="Location">
+                                <h:outputText value="#{station.location}" />
+                            </p:column>
 
-                <p:column headerText="Connector">
-                    <h:outputText value="#{station.connector}" />
-                </p:column>
+                            <p:column headerText="Connector">
+                                <h:outputText value="#{station.connector}" />
+                            </p:column>
 
-                <p:column headerText="Speed (kW)">
-                    <h:outputText value="#{station.chargingSpeed} kW" />
-                </p:column>
+                            <p:column headerText="Speed (kW)">
+                                <h:outputText value="#{station.chargingSpeed} kW" />
+                            </p:column>
 
-                <p:column headerText="Available">
-                    <h:outputText value="#{station.available ? 'Yes' : 'No'}" />
-                </p:column>
+                            <p:column headerText="Available">
+                                <h:outputText value="#{station.available ? 'Yes' : 'No'}" />
+                            </p:column>
 
-                <p:column headerText="Provider">
-                    <h:outputText value="#{station.providerVao.providerName}" />
-                </p:column>
+                            <p:column headerText="Provider">
+                                <h:outputText value="#{station.providerVao.providerName}" />
+                            </p:column>
 
-                <p:column headerText="Current User">
-                    <h:outputText value="#{station.currentUserEmail}" />
-                </p:column>
-            </p:dataTable>
-        </p:panel>
+                            <p:column headerText="Current User">
+                                <h:outputText value="#{station.currentUserEmail}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
 
-        <p:panel header="👤 Users">
-            <p:dataTable value="#{showUsers.users}" var="user"
-                         paginator="true" rows="5"
-                         rendered="#{not empty showUsers.users}">
+                    <p:panel header="👤 Users">
+                        <p:dataTable value="#{showUsers.users}" var="user"
+                                     paginator="true" rows="5"
+                                     rendered="#{not empty showUsers.users}">
 
-                <p:column headerText="Email">
-                    <h:outputText value="#{user.email}" />
-                </p:column>
+                            <p:column headerText="Email">
+                                <h:outputText value="#{user.email}" />
+                            </p:column>
 
-                <p:column headerText="Name">
-                    <h:outputText value="#{user.name}" />
-                </p:column>
+                            <p:column headerText="Name">
+                                <h:outputText value="#{user.name}" />
+                            </p:column>
 
-                <p:column headerText="Balance">
-                    <h:outputText value="$#{user.balance}" />
-                </p:column>
+                            <p:column headerText="Balance">
+                                <h:outputText value="$#{user.balance}" />
+                            </p:column>
 
-                <p:column headerText="Car Type">
-                    <h:outputText value="#{user.carType}" />
-                </p:column>
-            </p:dataTable>
-        </p:panel>
-
-    </h:form>
-</h:body>
+                            <p:column headerText="Car Type">
+                                <h:outputText value="#{user.carType}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
 </html>
