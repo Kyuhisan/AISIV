@@ -5,118 +5,140 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:composition template="/WEB-INF/template/template.xhtml">
-        <ui:define name="title">
-            Dashboard
-        </ui:define>
+<ui:composition template="/WEB-INF/template/template.xhtml">
+    <ui:define name="title">
+        Dashboard
+    </ui:define>
 
-        <ui:define name="content">
-            <h:body>
-                <h1>🚗 Charging Station Dashboard</h1>
-                <h:form>
-                    <p:panel header="📦 Providers">
-                        <p:dataTable value="#{showProviders.providers}" var="provider"
-                                     paginator="true" rows="5"
-                                     rendered="#{not empty showProviders.providers}">
+    <ui:define name="content">
+        <h:body>
+            <h1>🚗 Charging Station Dashboard</h1>
+            <h:form id="mainForm">
 
-                            <p:column headerText="Name">
-                                <h:outputText value="#{provider.providerName}" />
-                            </p:column>
+                <!-- PROVIDERS -->
+                <p:panel header="📦 Providers">
+                    <p:dataTable value="#{showProviders.providers}" var="provider"
+                                 paginator="true" rows="5"
+                                 rendered="#{not empty showProviders.providers}">
 
-                            <p:column headerText="Region">
-                                <h:outputText value="#{provider.activeRegion}" />
-                            </p:column>
+                        <p:column headerText="Name">
+                            <h:outputText value="#{provider.providerName}" />
+                        </p:column>
+                        <p:column headerText="Region">
+                            <h:outputText value="#{provider.activeRegion}" />
+                        </p:column>
+                        <p:column headerText="Stations Count">
+                            <h:outputText value="#{provider.listOfStations.size()}" />
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <h:commandButton value="Edit Provider" action="#{showProviders.updateProvider}">
+                                <f:setPropertyActionListener target="#{showProviders.selectedProviderName}" value="#{provider.providerName}" />
+                            </h:commandButton>
+                            <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
+                                             oncomplete="PF('deleteProviderDialog').show()">
+                                <f:setPropertyActionListener value="#{provider.providerName}" target="#{showProviders.selectedProviderName}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
 
-                            <p:column headerText="Stations Count">
-                                <h:outputText value="#{provider.listOfStations.size()}" />
-                            </p:column>
+                    <!-- Provider Dialog -->
+                    <p:confirmDialog widgetVar="deleteProviderDialog" showEffect="fade" width="300"
+                                     message="Delete this provider?" header="Confirm" severity="warn">
+                        <h:inputHidden value="#{showProviders.selectedProviderName}" />
+                        <p:commandButton value="Yes" icon="pi pi-check" action="#{showProviders.removeProvider}"
+                                         oncomplete="PF('deleteProviderDialog').hide()" update="mainForm" process="@form" />
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteProviderDialog').hide()" />
+                    </p:confirmDialog>
+                </p:panel>
 
-                            <p:column headerText="Actions">
-                                <h:commandButton value="Edit Provider" action="#{showProviders.updateProvider}">
-                                    <f:setPropertyActionListener target="#{showProviders.selectedProviderName}" value="#{provider.providerName}" />
-                                </h:commandButton>
+                <!-- STATIONS -->
+                <p:panel header="⚡ Charging Stations">
+                    <p:dataTable value="#{showChargingStations.stations}" var="station"
+                                 paginator="true" rows="5"
+                                 rendered="#{not empty showChargingStations.stations}">
 
-                                <h:commandButton value="Remove Provider" action="#{showProviders.removeProvider}">
-                                    <f:setPropertyActionListener target="#{showProviders.selectedProviderName}" value="#{provider.providerName}" />
-                                </h:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </p:panel>
+                        <p:column headerText="Location">
+                            <h:outputText value="#{station.location}" />
+                        </p:column>
+                        <p:column headerText="Connector">
+                            <h:outputText value="#{station.connector}" />
+                        </p:column>
+                        <p:column headerText="Speed (kW)">
+                            <h:outputText value="#{station.chargingSpeed} kW" />
+                        </p:column>
+                        <p:column headerText="Available">
+                            <h:outputText value="#{station.available ? 'Yes' : 'No'}" />
+                        </p:column>
+                        <p:column headerText="Provider">
+                            <h:outputText value="#{station.providerVao.providerName}" />
+                        </p:column>
+                        <p:column headerText="Current User">
+                            <h:outputText value="#{station.currentUserEmail}" />
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <h:commandButton value="Edit Station" action="#{showChargingStations.updateStation}">
+                                <f:setPropertyActionListener target="#{showChargingStations.selectedLocation}" value="#{station.location}" />
+                            </h:commandButton>
+                            <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
+                                             oncomplete="PF('deleteStationDialog').show()">
+                                <f:setPropertyActionListener value="#{station.location}" target="#{showChargingStations.selectedLocation}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
 
-                    <p:panel header="⚡ Charging Stations">
-                        <p:dataTable value="#{showChargingStations.stations}" var="station"
-                                     paginator="true" rows="5"
-                                     rendered="#{not empty showChargingStations.stations}">
+                    <!-- Station Dialog -->
+                    <p:confirmDialog widgetVar="deleteStationDialog" showEffect="fade" width="300"
+                                     message="Delete this station?" header="Confirm" severity="warn">
+                        <h:inputHidden value="#{showChargingStations.selectedLocation}" />
+                        <p:commandButton value="Yes" icon="pi pi-check" action="#{showChargingStations.removeStation}"
+                                         oncomplete="PF('deleteStationDialog').hide()" update="mainForm" process="@form" />
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteStationDialog').hide()" />
+                    </p:confirmDialog>
+                </p:panel>
 
-                            <p:column headerText="Location">
-                                <h:outputText value="#{station.location}" />
-                            </p:column>
+                <!-- USERS -->
+                <p:panel header="👤 Users">
+                    <p:dataTable value="#{showUsers.users}" var="user"
+                                 paginator="true" rows="5"
+                                 rendered="#{not empty showUsers.users}">
 
-                            <p:column headerText="Connector">
-                                <h:outputText value="#{station.connector}" />
-                            </p:column>
+                        <p:column headerText="Email">
+                            <h:outputText value="#{user.email}" />
+                        </p:column>
+                        <p:column headerText="Name">
+                            <h:outputText value="#{user.name}" />
+                        </p:column>
+                        <p:column headerText="Balance">
+                            <h:outputText value="$#{user.balance}" />
+                        </p:column>
+                        <p:column headerText="Car Type">
+                            <h:outputText value="#{user.carType}" />
+                        </p:column>
+                        <p:column exportable="false" ariaHeaderText="Actions">
+                            <h:commandButton value="Edit User" action="#{showUsers.updateUser}">
+                                <f:setPropertyActionListener target="#{showUsers.selectedEmail}" value="#{user.email}" />
+                            </h:commandButton>
+                            <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
+                                             oncomplete="PF('deleteUserDialog').show()">
+                                <f:setPropertyActionListener value="#{user.email}" target="#{showUsers.selectedEmail}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
 
-                            <p:column headerText="Speed (kW)">
-                                <h:outputText value="#{station.chargingSpeed} kW" />
-                            </p:column>
-
-                            <p:column headerText="Available">
-                                <h:outputText value="#{station.available ? 'Yes' : 'No'}" />
-                            </p:column>
-
-                            <p:column headerText="Provider">
-                                <h:outputText value="#{station.providerVao.providerName}" />
-                            </p:column>
-
-                            <p:column headerText="Current User">
-                                <h:outputText value="#{station.currentUserEmail}" />
-                            </p:column>
-
-                            <p:column headerText="Actions">
-                                <h:commandButton value="Edit Station" action="#{showChargingStations.updateStation}">
-                                    <f:setPropertyActionListener target="#{showChargingStations.selectedLocation}" value="#{station.location}" />
-                                </h:commandButton>
-
-                                <h:commandButton value="Remove Station" action="#{showChargingStations.removeStation()}">
-                                    <f:setPropertyActionListener target="#{showChargingStations.selectedLocation}" value="#{station.location}" />
-                                </h:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </p:panel>
-
-                    <p:panel header="👤 Users">
-                        <p:dataTable value="#{showUsers.users}" var="user"
-                                     paginator="true" rows="5"
-                                     rendered="#{not empty showUsers.users}">
-
-                            <p:column headerText="Email">
-                                <h:outputText value="#{user.email}" />
-                            </p:column>
-
-                            <p:column headerText="Name">
-                                <h:outputText value="#{user.name}" />
-                            </p:column>
-
-                            <p:column headerText="Balance">
-                                <h:outputText value="$#{user.balance}" />
-                            </p:column>
-
-                            <p:column headerText="Car Type">
-                                <h:outputText value="#{user.carType}" />
-                            </p:column>
-
-                            <p:column headerText="Actions">
-                                <h:commandButton value="Edit User" action="#{showUsers.updateUser}">
-                                    <f:setPropertyActionListener target="#{showUsers.selectedEmail}" value="#{user.email}" />
-                                </h:commandButton>
-                                <h:commandButton value="Remove User" action="#{showUsers.removeUser}">
-                                    <f:setPropertyActionListener target="#{showUsers.selectedEmail}" value="#{user.email}" />
-                                </h:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </p:panel>
-                </h:form>
-            </h:body>
-        </ui:define>
-    </ui:composition>
+                    <!-- User Dialog -->
+                    <p:confirmDialog widgetVar="deleteUserDialog" showEffect="fade" width="300"
+                                     message="Delete this user?" header="Confirm" severity="warn">
+                        <h:inputHidden value="#{showUsers.selectedEmail}" />
+                        <p:commandButton value="Yes" icon="pi pi-check" action="#{showUsers.removeUser}"
+                                         oncomplete="PF('deleteUserDialog').hide()" update="mainForm" process="@form" />
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteUserDialog').hide()" />
+                    </p:confirmDialog>
+                </p:panel>
+            </h:form>
+        </h:body>
+    </ui:define>
+</ui:composition>
 </html>
