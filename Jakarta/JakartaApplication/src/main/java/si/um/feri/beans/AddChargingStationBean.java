@@ -1,4 +1,4 @@
-package si.um.feri.jsf;
+package si.um.feri.beans;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -18,7 +18,7 @@ import java.util.List;
 @SessionScoped
 @Getter
 @Setter
-public class AddChargingStationBeam implements Serializable {
+public class AddChargingStationBean implements Serializable {
     private ChargingStationVao station = new ChargingStationVao();
     private String selectedProviderName;
 

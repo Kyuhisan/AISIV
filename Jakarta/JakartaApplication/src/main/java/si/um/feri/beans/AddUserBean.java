@@ -1,4 +1,4 @@
-package si.um.feri.jsf;
+package si.um.feri.beans;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @SessionScoped
 @Getter
 @Setter
-public class AddUserBeam implements Serializable {
+public class AddUserBean implements Serializable {
     private UserVao user = new UserVao();
 
     @Inject

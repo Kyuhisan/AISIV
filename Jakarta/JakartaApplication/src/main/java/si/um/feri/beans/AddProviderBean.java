@@ -1,11 +1,10 @@
-package si.um.feri.jsf;
+package si.um.feri.beans;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import si.um.feri.enums.carTypeENUM;
 import si.um.feri.enums.regionENUM;
 import si.um.feri.service.ProviderService;
 import si.um.feri.vao.ProviderVao;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 @SessionScoped
 @Getter
 @Setter
-public class AddProviderBeam implements Serializable {
+public class AddProviderBean implements Serializable {
     private ProviderVao provider = new ProviderVao();
 
     @Inject

@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/WEB-INF/template/template.xhtml">
         <ui:define name="title">
@@ -31,8 +32,12 @@
                             </p:column>
 
                             <p:column headerText="Actions">
+                                <h:commandButton value="Edit Provider" action="#{showProviders.updateProvider}">
+                                    <f:setPropertyActionListener target="#{showProviders.selectedProviderName}" value="#{provider.providerName}" />
+                                </h:commandButton>
+
                                 <h:commandButton value="Remove Provider" action="#{showProviders.removeProvider}">
-                                    <f:setPropertyActionListener target="#{showProviders.selectedProvider}" value="#{provider.providerName}" />
+                                    <f:setPropertyActionListener target="#{showProviders.selectedProviderName}" value="#{provider.providerName}" />
                                 </h:commandButton>
                             </p:column>
                         </p:dataTable>
@@ -68,8 +73,12 @@
                             </p:column>
 
                             <p:column headerText="Actions">
+                                <h:commandButton value="Edit Station" action="#{showChargingStations.updateStation}">
+                                    <f:setPropertyActionListener target="#{showChargingStations.selectedLocation}" value="#{station.location}" />
+                                </h:commandButton>
+
                                 <h:commandButton value="Remove Station" action="#{showChargingStations.removeStation()}">
-                                    <f:setPropertyActionListener target="#{showChargingStations.selectedStation}" value="#{station.location}" />
+                                    <f:setPropertyActionListener target="#{showChargingStations.selectedLocation}" value="#{station.location}" />
                                 </h:commandButton>
                             </p:column>
                         </p:dataTable>
@@ -97,6 +106,9 @@
                             </p:column>
 
                             <p:column headerText="Actions">
+                                <h:commandButton value="Edit User" action="#{showUsers.updateUser}">
+                                    <f:setPropertyActionListener target="#{showUsers.selectedEmail}" value="#{user.email}" />
+                                </h:commandButton>
                                 <h:commandButton value="Remove User" action="#{showUsers.removeUser}">
                                     <f:setPropertyActionListener target="#{showUsers.selectedEmail}" value="#{user.email}" />
                                 </h:commandButton>

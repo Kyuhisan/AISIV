@@ -1,4 +1,4 @@
-package si.um.feri.jsf;
+package si.um.feri.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
