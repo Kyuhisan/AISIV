@@ -24,6 +24,12 @@ public class ShowProvidersBean {
         this.selectedProviderName = selectedProvider;
     }
 
+    public Object getProviderNames() {
+        return providerService.getProviders().stream()
+                .map(ProviderVao::getProviderName)
+                .toList();
+    }
+
     //  CRUD
     public List<ProviderVao> getProviders() {
         return providerService.getProviders();
@@ -43,5 +49,7 @@ public class ShowProvidersBean {
     public void removeProvider() {
         providerService.deleteProvider(selectedProviderName);
     }
+
+
 }
 

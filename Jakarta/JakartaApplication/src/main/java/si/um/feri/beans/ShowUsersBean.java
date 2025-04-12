@@ -3,6 +3,7 @@ package si.um.feri.beans;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import si.um.feri.enums.carTypeENUM;
 import si.um.feri.service.UserService;
 import si.um.feri.vao.UserVao;
 import java.util.List;

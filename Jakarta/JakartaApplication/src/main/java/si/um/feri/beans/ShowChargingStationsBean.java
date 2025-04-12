@@ -42,8 +42,23 @@ public class ShowChargingStationsBean {
     }
 
     public void removeStation() {
-        stationService.deleteChargingStation(selectedLocation);
+        Optional<ChargingStationVao> selectedStationOpt = stationService.getChargingStationByLocation(selectedLocation);
+
+        if (selectedStationOpt.isPresent()) {
+            ChargingStationVao station = selectedStationOpt.get();
+
+            // Step 1: Remove from provider's list
+            if (station.getProviderVao() != null) {
+                station.getProviderVao().getListOfStations().remove(station);
+            }
+
+            // Step 2: Remove from global station list
+            stationService.deleteChargingStation(selectedLocation);
+        } else {
+            System.out.println("Station not found: " + selectedLocation);
+        }
     }
+
 }
 
 
