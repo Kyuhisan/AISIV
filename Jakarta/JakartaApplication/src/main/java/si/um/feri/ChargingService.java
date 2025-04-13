@@ -1,12 +1,22 @@
-package si.um.feri.service;
+package si.um.feri;
 
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 import si.um.feri.chainofresponsibility.*;
-import si.um.feri.service.interfaces.ChargingIService;
+import si.um.feri.service.interfaces.ChargingStationIService;
+import si.um.feri.service.interfaces.UserIService;
 import si.um.feri.vao.ChargingStationVao;
 import si.um.feri.vao.UserVao;
 
+import java.util.Optional;
+
+@Stateless
 public class ChargingService implements ChargingIService {
     private final UserHandler userChain;
+    @EJB
+    private ChargingStationIService stationService;
+    @EJB
+    private UserIService userService;
 
     public ChargingService() {
         StationAvailabilityCheck availability = new StationAvailabilityCheck();
@@ -39,6 +49,24 @@ public class ChargingService implements ChargingIService {
     public void stopCharging(UserVao user, ChargingStationVao station) {
         station.setAvailable(true);
         System.out.println("🛑 Charging stopped for user: " + user.getName());
+    }
+
+    @Override
+    public String canCharge(String userName, String stationName) {
+        Optional<UserVao> user;
+        Optional<ChargingStationVao> station;
+
+        user = userService.getUserByEmail(userName);
+        station = stationService.getChargingStationByLocation(stationName);
+
+        if (user.isPresent() && station.isPresent()) {
+            boolean result = startCharging(user.get(), station.get());
+            if (result) {
+                return "Yes the user can charge at this station.";
+            } else {
+                return "The user cannot charge at this station.";
+            }
+        } return "User or station not found.";
     }
 }
 

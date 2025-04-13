@@ -1,4 +1,4 @@
-package si.um.feri.service.interfaces;
+package si.um.feri;
 
 import jakarta.ejb.Remote;
 import si.um.feri.vao.ChargingStationVao;
@@ -8,4 +8,5 @@ import si.um.feri.vao.UserVao;
 public interface ChargingIService {
     boolean startCharging(UserVao user, ChargingStationVao station);
     void stopCharging(UserVao user, ChargingStationVao station);
+    public String canCharge(String name, String location);
 }
