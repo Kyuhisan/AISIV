@@ -1,5 +1,6 @@
 package si.um.feri.dao;
 
+import jakarta.ejb.Stateless;
 import si.um.feri.dao.interfaces.ProviderIDao;
 import si.um.feri.vao.ProviderVao;
 import java.util.ArrayList;
@@ -7,22 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Stateless
 public class ProviderDao implements ProviderIDao {
     private final List<ProviderVao> listOfProviders = Collections.synchronizedList(new ArrayList<>());
-    private static volatile ProviderDao instance;
-
-    private ProviderDao() {}
-
-    public static ProviderDao getInstance() {
-        if (instance == null) {
-            synchronized (ProviderDao.class) {
-                if (instance == null) {
-                    instance = new ProviderDao();
-                }
-            }
-        }
-        return instance;
-    }
 
     //  create
     @Override

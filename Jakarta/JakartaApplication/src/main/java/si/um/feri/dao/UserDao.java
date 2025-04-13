@@ -1,5 +1,6 @@
 package si.um.feri.dao;
 
+import jakarta.ejb.Stateless;
 import si.um.feri.dao.interfaces.UserIDao;
 import si.um.feri.vao.UserVao;
 import java.util.ArrayList;
@@ -7,22 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Stateless
 public class UserDao implements UserIDao {
     private final List<UserVao> listOfUsers = Collections.synchronizedList(new ArrayList<>());
-    private static volatile UserDao instance;
-
-    private UserDao() {}
-
-    public static UserDao getInstance() {
-        if (instance == null) {
-            synchronized (UserDao.class) {
-                if (instance == null) {
-                    instance = new UserDao();
-                }
-            }
-        }
-        return instance;
-    }
 
     //  create
     @Override

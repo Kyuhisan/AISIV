@@ -1,19 +1,18 @@
 package si.um.feri.beans;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import si.um.feri.enums.carTypeENUM;
-import si.um.feri.service.UserService;
+import org.primefaces.event.CellEditEvent;
+import si.um.feri.service.interfaces.UserIService;
 import si.um.feri.vao.UserVao;
 import java.util.List;
-import java.util.Optional;
 
 @Named("showUsers")
 @RequestScoped
 public class ShowUsersBean {
-    @Inject
-    UserService userService;
+    @EJB
+    private UserIService userService;
 
     private String selectedEmail;
 
@@ -30,20 +29,18 @@ public class ShowUsersBean {
         return userService.getUsers();
     }
 
-    public void updateUser() {
-        Optional<UserVao> selectedUser = userService.getUserByEmail(selectedEmail);
-
-        if (selectedUser.isPresent()) {
-            UserVao user = selectedUser.get();
-            userService.updateUser(user);
-        } else {
-            System.out.println("User not found with email: " + selectedEmail);
-        }
-    }
-
     public void removeUser() {
         userService.deleteUser(selectedEmail);
     }
+
+    public void onCellEdit(CellEditEvent event) {
+        UserVao edited = (UserVao) event.getRowData();
+
+        try {
+            userService.updateUser(edited);
+            System.out.println("✅ User updated: " + edited.getEmail());
+        } catch (Exception e) {
+            System.err.println("❌ Error updating user: " + e.getMessage());
+        }
+    }
 }
-
-

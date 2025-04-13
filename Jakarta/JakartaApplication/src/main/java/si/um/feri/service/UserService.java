@@ -1,15 +1,22 @@
 package si.um.feri.service;
 
-import si.um.feri.dao.UserDao;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 import si.um.feri.dao.interfaces.UserIDao;
+import si.um.feri.service.interfaces.ChargingStationIService;
+import si.um.feri.service.interfaces.UserIService;
+import si.um.feri.vao.ChargingStationVao;
 import si.um.feri.vao.UserVao;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public class UserService implements Serializable {
-    private final UserIDao dao_user = UserDao.getInstance();
+@Stateless
+public class UserService implements Serializable, UserIService {
+    @EJB
+    private UserIDao dao_user;
+    @EJB
+    private ChargingStationIService chargingStationService;
 
     //  create
     public void addUser(UserVao user) {
@@ -57,6 +64,15 @@ public class UserService implements Serializable {
         Optional<UserVao> user = dao_user.getUserByEmail(email);
 
         if (user.isPresent()) {
+            List<ChargingStationVao> stations = chargingStationService.getChargingStations();
+            for (ChargingStationVao station : stations) {
+                if (station.getCurrentUserEmail() != null &&
+                        station.getCurrentUserEmail().equalsIgnoreCase(email)) {
+                    station.setCurrentUserEmail(null);
+                    chargingStationService.updateChargingStation(station);
+                }
+            }
+
             dao_user.deleteUserByEmail(email);
             System.out.println("✅ User deleted!");
         } else {

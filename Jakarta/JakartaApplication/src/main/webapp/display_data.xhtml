@@ -15,7 +15,6 @@
             <f:view>
                 <h1>🚗 Charging Station Dashboard</h1>
                 <h:form id="mainForm">
-
                     <!-- PROVIDERS -->
                     <p:panel header="📦 Providers">
                         <p:dataTable value="#{showProviders.providers}"
@@ -26,6 +25,8 @@
                                      editable="true"
                                      editMode="cell"
                                      rendered="#{not empty showProviders.providers}">
+
+                            <p:ajax event="cellEdit" listener="#{showProviders.onCellEdit}" update="mainForm" />
 
                             <p:column headerText="Name">
                                 <p:cellEditor>
@@ -86,6 +87,8 @@
                                      editable="true"
                                      editMode="cell"
                                      rendered="#{not empty showChargingStations.stations}">
+
+                            <p:ajax event="cellEdit" listener="#{showChargingStations.onCellEdit}" update="mainForm" />
 
                             <p:column headerText="Location">
                                 <p:cellEditor>
@@ -186,6 +189,8 @@
                                      editable="true"
                                      editMode="cell"
                                      rendered="#{not empty showUsers.users}">
+
+                            <p:ajax event="cellEdit" listener="#{showUsers.onCellEdit}" update="mainForm" />
 
                             <p:column headerText="Email">
                                 <p:cellEditor>

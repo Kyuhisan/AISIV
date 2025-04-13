@@ -1,15 +1,18 @@
 package si.um.feri.service;
 
-import si.um.feri.dao.ChargingStationDao;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 import si.um.feri.dao.interfaces.ChargingStationIDao;
+import si.um.feri.service.interfaces.ChargingStationIService;
 import si.um.feri.vao.ChargingStationVao;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public class ChargingStationService implements Serializable {
-    private final ChargingStationIDao dao_station = ChargingStationDao.getInstance();
+@Stateless
+public class ChargingStationService implements Serializable, ChargingStationIService {
+    @EJB
+    private ChargingStationIDao dao_station;
 
     //  create
     public void addChargingStation(ChargingStationVao station) {

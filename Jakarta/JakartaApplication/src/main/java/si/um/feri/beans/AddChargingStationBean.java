@@ -1,13 +1,13 @@
 package si.um.feri.beans;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import si.um.feri.enums.connectorENUM;
-import si.um.feri.service.ChargingStationService;
-import si.um.feri.service.ProviderService;
+import si.um.feri.service.interfaces.ChargingStationIService;
+import si.um.feri.service.interfaces.ProviderIService;
 import si.um.feri.vao.ChargingStationVao;
 import si.um.feri.vao.ProviderVao;
 
@@ -22,10 +22,10 @@ public class AddChargingStationBean implements Serializable {
     private ChargingStationVao station = new ChargingStationVao();
     private String selectedProviderName;
 
-    @Inject
-    private ChargingStationService stationService;
-    @Inject
-    private ProviderService providerService;
+    @EJB
+    private ChargingStationIService stationService;
+    @EJB
+    private ProviderIService providerService;
 
     public void addChargingStation() {
         ProviderVao selectedProvider = providerService.getProviderByName(selectedProviderName).orElse(null);

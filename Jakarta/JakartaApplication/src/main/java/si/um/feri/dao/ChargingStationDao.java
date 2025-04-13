@@ -1,5 +1,6 @@
 package si.um.feri.dao;
 
+import jakarta.ejb.Stateless;
 import si.um.feri.dao.interfaces.ChargingStationIDao;
 import si.um.feri.vao.ChargingStationVao;
 import java.util.ArrayList;
@@ -7,22 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Stateless
 public class ChargingStationDao implements ChargingStationIDao {
     private final List<ChargingStationVao> listOfStations = Collections.synchronizedList(new ArrayList<>());
-    private static volatile ChargingStationDao instance;
-
-    private ChargingStationDao() {}
-
-    public static ChargingStationDao getInstance() {
-        if (instance == null) {
-            synchronized (ChargingStationDao.class) {
-                if (instance == null) {
-                    instance = new ChargingStationDao();
-                }
-            }
-        }
-        return instance;
-    }
 
     //  create
     @Override

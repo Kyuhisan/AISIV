@@ -1,20 +1,20 @@
 package si.um.feri.beans;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import si.um.feri.service.ChargingStationService;
+import org.primefaces.event.CellEditEvent;
+import si.um.feri.service.interfaces.ChargingStationIService;
 import si.um.feri.vao.ChargingStationVao;
-import si.um.feri.vao.UserVao;
-
 import java.util.List;
 import java.util.Optional;
 
 @Named("showChargingStations")
 @RequestScoped
 public class ShowChargingStationsBean {
-    @Inject
-    ChargingStationService stationService;
+    @EJB
+    private ChargingStationIService stationService;
+
     private String selectedLocation;
 
     public String getSelectedLocation() {
@@ -30,35 +30,31 @@ public class ShowChargingStationsBean {
         return stationService.getChargingStations();
     }
 
-    public void updateStation() {
-        Optional<ChargingStationVao> selectedStation = stationService.getChargingStationByLocation(selectedLocation);
-
-        if (selectedStation.isPresent()) {
-            ChargingStationVao station = selectedStation.get();
-            stationService.updateChargingStation(station);
-        } else {
-            System.out.println("Station not found with email: " + selectedStation);
-        }
-    }
-
     public void removeStation() {
         Optional<ChargingStationVao> selectedStationOpt = stationService.getChargingStationByLocation(selectedLocation);
 
         if (selectedStationOpt.isPresent()) {
             ChargingStationVao station = selectedStationOpt.get();
 
-            // Step 1: Remove from provider's list
             if (station.getProviderVao() != null) {
                 station.getProviderVao().getListOfStations().remove(station);
             }
-
-            // Step 2: Remove from global station list
             stationService.deleteChargingStation(selectedLocation);
         } else {
             System.out.println("Station not found: " + selectedLocation);
         }
     }
 
+    public void onCellEdit(CellEditEvent event) {
+        ChargingStationVao edited = (ChargingStationVao) event.getRowData();
+
+        try {
+            stationService.updateChargingStation(edited);
+            System.out.println("✅ Station updated: " + edited.getLocation());
+        } catch (Exception e) {
+            System.err.println("❌ Error updating station: " + e.getMessage());
+        }
+    }
 }
 
 

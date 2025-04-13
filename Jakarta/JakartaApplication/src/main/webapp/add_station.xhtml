@@ -15,6 +15,7 @@
                     <h:form>
                         <h2>New Charging Station</h2>
 
+                        <h:outputLabel value="Provider:" for="provider" />
                         <h:selectOneMenu id="provider" value="#{addChargingStation.selectedProviderName}">
                             <f:selectItems value="#{addChargingStation.providers}" var="p"
                                            itemValue="#{p.providerName}" itemLabel="#{p.providerName}" />

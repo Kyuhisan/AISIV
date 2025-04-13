@@ -1,15 +1,22 @@
 package si.um.feri.service;
 
-import si.um.feri.dao.ProviderDao;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 import si.um.feri.dao.interfaces.ProviderIDao;
+import si.um.feri.service.interfaces.ChargingStationIService;
+import si.um.feri.service.interfaces.ProviderIService;
+import si.um.feri.vao.ChargingStationVao;
 import si.um.feri.vao.ProviderVao;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public class ProviderService implements Serializable {
-    private final ProviderIDao dao_provider = ProviderDao.getInstance();
+@Stateless
+public class ProviderService implements Serializable, ProviderIService {
+    @EJB
+    private ProviderIDao dao_provider;
+    @EJB
+    private ChargingStationIService chargingStationService;
 
     //  create
     public void addProvider(ProviderVao provider) {
@@ -57,6 +64,14 @@ public class ProviderService implements Serializable {
         Optional<ProviderVao> provider = dao_provider.getProviderByName(providerName);
 
         if (provider.isPresent()) {
+            List<ChargingStationVao> stations = chargingStationService.getChargingStations();
+            for (ChargingStationVao station : stations) {
+                if (station.getProviderVao() != null &&
+                        station.getProviderVao().getProviderName().equals(providerName)) {
+                    station.setProviderVao(null);
+                    chargingStationService.updateChargingStation(station); // persist change
+                }
+            }
             System.out.println("✅ Provider deleted!");
             dao_provider.deleteProvider(providerName);
         } else {

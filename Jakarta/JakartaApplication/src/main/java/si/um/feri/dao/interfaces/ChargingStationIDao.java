@@ -1,9 +1,11 @@
 package si.um.feri.dao.interfaces;
 
+import jakarta.ejb.Local;
 import si.um.feri.vao.ChargingStationVao;
 import java.util.List;
 import java.util.Optional;
 
+@Local
 public interface ChargingStationIDao {
     //  create
     void addChargingStation(ChargingStationVao chargingStation);

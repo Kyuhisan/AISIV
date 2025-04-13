@@ -1,15 +1,15 @@
 package si.um.feri.beans;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
-import jakarta.inject.Inject;
 import si.um.feri.enums.carTypeENUM;
 import si.um.feri.enums.connectorENUM;
 import si.um.feri.enums.regionENUM;
-import si.um.feri.service.ChargingStationService;
-import si.um.feri.service.ProviderService;
-import si.um.feri.service.UserService;
+import si.um.feri.service.interfaces.ChargingStationIService;
+import si.um.feri.service.interfaces.ProviderIService;
+import si.um.feri.service.interfaces.UserIService;
 import si.um.feri.vao.ChargingStationVao;
 import si.um.feri.vao.ProviderVao;
 import si.um.feri.vao.UserVao;
@@ -17,12 +17,12 @@ import si.um.feri.vao.UserVao;
 @Startup
 @Singleton
 public class InitialDataBean {
-    @Inject
-    UserService user;
-    @Inject
-    ProviderService provider;
-    @Inject
-    ChargingStationService chargingStation;
+    @EJB
+    ProviderIService provider;
+    @EJB
+    UserIService user;
+    @EJB
+    ChargingStationIService chargingStation;
 
     @PostConstruct
     public void init() {
