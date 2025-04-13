@@ -1,10 +1,11 @@
 package si.um.feri.service;
 
 import si.um.feri.chainofresponsibility.*;
+import si.um.feri.service.interfaces.ChargingIService;
 import si.um.feri.vao.ChargingStationVao;
 import si.um.feri.vao.UserVao;
 
-public class ChargingService {
+public class ChargingService implements ChargingIService {
     private final UserHandler userChain;
 
     public ChargingService() {
@@ -17,6 +18,7 @@ public class ChargingService {
         userChain = balance;
     }
 
+    @Override
     public boolean startCharging(UserVao user, ChargingStationVao station) {
         System.out.println("🔋 Starting charging process...");
 
@@ -33,6 +35,7 @@ public class ChargingService {
         return false;
     }
 
+    @Override
     public void stopCharging(UserVao user, ChargingStationVao station) {
         station.setAvailable(true);
         System.out.println("🛑 Charging stopped for user: " + user.getName());
