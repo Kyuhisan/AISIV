@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="/WEB-INF/template/template.xhtml">
+    <ui:define name="title">
+        Dashboard
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <f:view>
+                <h1>🚗 Charging Station Dashboard</h1>
+                <h:form id="mainForm">
+                    <!-- PROVIDERS -->
+                    <p:panel header="📦 Providers">
+                        <p:dataTable value="#{showProviders.providers}"
+                                     var="provider"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="5"
+                                     editable="true"
+                                     editMode="cell"
+                                     rendered="#{not empty showProviders.providers}">
+
+                            <p:ajax event="cellEdit" listener="#{showProviders.onCellEdit}" update="mainForm" />
+
+                            <p:column headerText="Name">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{provider.providerName}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{provider.providerName}" style="width:100%" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Region">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{provider.activeRegion}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{provider.activeRegion}" style="width:100%" label="Car Type">
+                                            <f:selectItems value="#{addProvider.regions}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Stations">
+                                <ui:repeat value="#{provider.listOfStations}" var="station" varStatus="status">
+                                    #{station.location}#{!status.last ? ', ' : ''}<br/>
+                                </ui:repeat>
+                            </p:column>
+
+                            <p:column headerText="Actions">
+                                <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
+                                                 oncomplete="PF('deleteProviderDialog').show()">
+                                    <f:setPropertyActionListener value="#{provider.providerName}" target="#{showProviders.selectedProviderName}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+                        <!-- Provider Dialog -->
+                        <p:confirmDialog widgetVar="deleteProviderDialog" showEffect="fade" width="300"
+                                         message="Delete this provider?" header="Confirm" severity="warn">
+                            <h:inputHidden value="#{showProviders.selectedProviderName}" />
+                            <p:commandButton value="Yes" icon="pi pi-check" action="#{showProviders.removeProvider}"
+                                             oncomplete="PF('deleteProviderDialog').hide()" update="mainForm" process="@form" />
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('deleteProviderDialog').hide()" />
+                        </p:confirmDialog>
+                    </p:panel>
+
+                    <!-- STATIONS -->
+                    <p:panel header="⚡ Charging Stations">
+                        <p:dataTable value="#{showChargingStations.stations}"
+                                     var="station"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="5"
+                                     editable="true"
+                                     editMode="cell"
+                                     rendered="#{not empty showChargingStations.stations}">
+
+                            <p:ajax event="cellEdit" listener="#{showChargingStations.onCellEdit}" update="mainForm" />
+
+                            <p:column headerText="Location">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{station.location}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{station.location}" style="width:100%" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Connector">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{station.connector}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{station.connector}" style="width:100%" label="Car Type">
+                                            <f:selectItems value="#{addChargingStation.connector}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Speed (kW)">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{station.chargingSpeed} kW" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{station.chargingSpeed}" style="width:100%" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Available">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{station.available}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{station.available}" style="width:100%" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Provider">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{station.provider.providerName}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{station.provider.providerName}" style="width:100%" label="Provider">
+                                            <f:selectItems value="#{showProviders.providerNames}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Current User">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{station.currentUserEmail}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{station.currentUserEmail}" style="width:100%" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Actions">
+                                <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
+                                                 oncomplete="PF('deleteStationDialog').show()">
+                                    <f:setPropertyActionListener value="#{station.location}" target="#{showChargingStations.selectedLocation}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+                        <!-- Station Dialog -->
+                        <p:confirmDialog widgetVar="deleteStationDialog" showEffect="fade" width="300"
+                                         message="Delete this station?" header="Confirm" severity="warn">
+                            <h:inputHidden value="#{showChargingStations.selectedLocation}" />
+                            <p:commandButton value="Yes" icon="pi pi-check" action="#{showChargingStations.removeStation}"
+                                             oncomplete="PF('deleteStationDialog').hide()" update="mainForm" process="@form" />
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('deleteStationDialog').hide()" />
+                        </p:confirmDialog>
+                    </p:panel>
+
+                    <!-- USERS -->
+                    <p:panel header="👤 Users">
+                        <p:dataTable value="#{showUsers.users}"
+                                     var="user"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="5"
+                                     editable="true"
+                                     editMode="cell"
+                                     rendered="#{not empty showUsers.users}">
+
+                            <p:ajax event="cellEdit" listener="#{showUsers.onCellEdit}" update="mainForm" />
+
+                            <p:column headerText="Email">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{user.email}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{user.email}" style="width:100%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Name">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{user.name}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{user.name}" style="width:100%" label="Name"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Balance">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{user.balance}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{user.balance}" style="width:100%" label="Name"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Car Type">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{user.carType}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{user.carType}" style="width:100%" label="Car Type">
+                                            <f:selectItems value="#{addUser.carTypes}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column exportable="false" ariaHeaderText="Actions">
+                                <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
+                                                 oncomplete="PF('deleteUserDialog').show()">
+                                    <f:setPropertyActionListener value="#{user.email}" target="#{showUsers.selectedEmail}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+                        <!-- User Dialog -->
+                        <p:confirmDialog widgetVar="deleteUserDialog" showEffect="fade" width="300"
+                                         message="Delete this user?" header="Confirm" severity="warn">
+                            <h:inputHidden value="#{showUsers.selectedEmail}" />
+                            <p:commandButton value="Yes" icon="pi pi-check" action="#{showUsers.removeUser}"
+                                             oncomplete="PF('deleteUserDialog').hide()" update="mainForm" process="@form" />
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('deleteUserDialog').hide()" />
+                        </p:confirmDialog>
+                    </p:panel>
+                </h:form>
+            </f:view>
+        </h:body>
+    </ui:define>
+</ui:composition>
+</html>
