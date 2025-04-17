@@ -5,15 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import si.um.feri.dao.interfaces.ChargingStationIDao;
 import si.um.feri.vao.ChargingStationVao;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Stateless
 public class ChargingStationDao implements ChargingStationIDao {
-    private final List<ChargingStationVao> listOfStations = Collections.synchronizedList(new ArrayList<>());
-
     @PersistenceContext
     EntityManager em;
 

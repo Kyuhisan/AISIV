@@ -5,15 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import si.um.feri.dao.interfaces.ProviderIDao;
 import si.um.feri.vao.ProviderVao;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Stateless
 public class ProviderDao implements ProviderIDao {
-    private final List<ProviderVao> listOfProviders = Collections.synchronizedList(new ArrayList<>());
-
     @PersistenceContext
     EntityManager em;
 

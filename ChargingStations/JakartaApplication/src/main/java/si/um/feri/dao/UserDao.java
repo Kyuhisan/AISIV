@@ -5,15 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import si.um.feri.dao.interfaces.UserIDao;
 import si.um.feri.vao.UserVao;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Stateless
 public class UserDao implements UserIDao {
-    private final List<UserVao> listOfUsers = Collections.synchronizedList(new ArrayList<>());
-
     @PersistenceContext
     EntityManager em;
 
@@ -39,12 +35,7 @@ public class UserDao implements UserIDao {
 
     @Override
     public void updateUser(UserVao user) {
-//        synchronized (listOfUsers) {
-//            getUserByEmail(user.getEmail()).ifPresentOrElse(
-//                    userToUpdate -> listOfUsers.set(listOfUsers.indexOf(userToUpdate), user),
-//                    () -> System.out.println("❌ User not found!")
-//            );
-//        }
+        em.merge(user);
     }
 
     @Override

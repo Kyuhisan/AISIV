@@ -48,13 +48,18 @@ public class UserService implements Serializable, UserIService {
 
     //  update
     public void updateUser(UserVao user) {
+        if (user == null || user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new IllegalArgumentException("❌ Invalid user or missing email!");
+        }
+
         if (dao_user.getUserByEmail(user.getEmail()).isEmpty()) {
             throw new IllegalArgumentException("❌ User not found!");
         } else {
-            System.out.println("✅ Station updated!");
+            System.out.println("✅ User updated!");
             dao_user.updateUser(user);
         }
     }
+
 
     //  delete
     public void deleteUser(String email) {

@@ -2,6 +2,7 @@ package si.um.feri.vao;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import si.um.feri.enums.regionENUM;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class ProviderVao {
     @Id
     private String providerName;
@@ -22,10 +24,6 @@ public class ProviderVao {
     @OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
     private List<ChargingStationVao> listOfStations;
 
-    //  constructors
-    public ProviderVao() {
-
-    }
     public ProviderVao(String providerName, regionENUM activeRegion) {
         this();
         this.providerName = providerName;
@@ -33,7 +31,6 @@ public class ProviderVao {
         this.activeRegion = activeRegion;
     }
 
-    //  toString
     @Override
     public String toString() {
         return "🏢 ProviderVao: " + "\n" +

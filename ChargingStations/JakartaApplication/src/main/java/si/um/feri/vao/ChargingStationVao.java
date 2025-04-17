@@ -2,7 +2,9 @@ package si.um.feri.vao;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import si.um.feri.enums.connectorENUM;
 import si.um.feri.observers.ChargingStationObserver;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class ChargingStationVao {
     //  variables
     @Id
@@ -23,17 +26,14 @@ public class ChargingStationVao {
     @JoinColumn(name = "provider_providerName", nullable = true)
     private ProviderVao provider;
 
+    @Transient
+    private List<ChargingStationObserver> stationObservers = new ArrayList<>();
+
     private boolean isAvailable;
     private double chargingSpeed;
     private String currentUserEmail;
 
-    @Transient
-    private List<ChargingStationObserver> stationObservers = new ArrayList<>();
 
-    //  constructors
-    public ChargingStationVao() {
-
-    }
     public ChargingStationVao(ProviderVao provider, connectorENUM connector, String location, boolean isAvailable, double chargingSpeed) {
         this();
         this.provider = provider;
@@ -44,7 +44,6 @@ public class ChargingStationVao {
         this.currentUserEmail = "";
     }
 
-    //  observers
     public void addObserver(ChargingStationObserver observer) {
         stationObservers.add(observer);
     }
@@ -56,8 +55,6 @@ public class ChargingStationVao {
             observer.update(provider, station, action);
         }
     }
-
-    //  observer linked functions
     public void getStationsAvailabilityStatus(ChargingStationVao station) {
         notifyObservers(station, "status");
     }
@@ -72,7 +69,6 @@ public class ChargingStationVao {
         notifyObservers(station, "stopped");
     }
 
-    //  toString
     @Override
     public String toString() {
         return "📍 Station: " + "\n" +
