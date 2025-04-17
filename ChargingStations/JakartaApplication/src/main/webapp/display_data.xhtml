@@ -17,8 +17,6 @@
                 <h:form id="mainForm">
                     <!-- PROVIDERS -->
                     <p:panel header="📦 Providers Panel">
-<!--                        selection="#{crudView.selectedProducts}"-->
-<!--                        rowKey="#{product.id}"-->
                         <p:dataTable id="datatable-providers"
                                      var="provider"
                                      value="#{showProviders.providers}"
@@ -44,8 +42,8 @@
 
                             <p:column headerText="Actions">
                                 <p:commandButton icon="pi pi-pencil" process="@this" update="mainForm"
-                                                 oncomplete="PF('deleteUserDialog').show()">
-                                    <f:setPropertyActionListener value="#{provider.providerName}" target="#{showProviders.selectedProviderName}" />
+                                                 oncomplete="PF('manageProviderDialog').show()">
+                                    <f:setPropertyActionListener value="#{provider}" target="#{showProviders.selectedProvider}" />
                                 </p:commandButton>
                                 <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
                                                  oncomplete="PF('deleteProviderDialog').show()">
@@ -63,12 +61,37 @@
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('deleteProviderDialog').hide()" />
                         </p:confirmDialog>
+
+                        <!-- UPDATE Provider Dialog -->
+                        <p:dialog header="Edit Provider"
+                                  widgetVar="manageProviderDialog"
+                                  modal="true"
+                                  showEffect="fade"
+                                  draggable="false"
+                                  resizable="false"
+                                  closable="true">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel value="Provider Name:" for="providerName" />
+                                <h:inputText id="providerName" value="#{showProviders.selectedProvider.providerName}" readonly="true" />
+
+                                <h:outputLabel value="Region:" for="region" />
+                                <p:selectOneMenu id="region" value="#{showProviders.selectedProvider != null ? showProviders.selectedProvider.activeRegion : null}">
+                                    <f:selectItems value="#{addProvider.regions}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" action="#{showProviders.updateProvider}" icon="pi pi-check"
+                                                 update="mainForm" process="@form" />
+                                <p:commandButton value="Cancel" type="button" icon="pi pi-times"
+                                                 onclick="PF('manageProviderDialog').hide()" styleClass="ui-button-secondary" />
+                            </f:facet>
+                        </p:dialog>
+
                     </p:panel>
 
                     <!-- STATIONS -->
                     <p:panel header="⚡ Charging Stations Panel">
-<!--                        selection="#{crudView.selectedProducts}"-->
-<!--                        rowKey="#{product.id}"-->
                         <p:dataTable id="datatable-stations"
                                      var="station"
                                      value="#{showChargingStations.stations}"
@@ -101,9 +124,10 @@
 
                             <p:column headerText="Actions">
                                 <p:commandButton icon="pi pi-pencil" process="@this" update="mainForm"
-                                                 oncomplete="PF('deleteUserDialog').show()">
-                                    <f:setPropertyActionListener value="#{station.location}" target="#{showChargingStations.selectedLocation}" />
+                                                 oncomplete="PF('manageStationDialog').show()">
+                                    <f:setPropertyActionListener value="#{station}" target="#{showChargingStations.selectedStation}" />
                                 </p:commandButton>
+
                                 <p:commandButton icon="pi pi-trash" process="@this" update="mainForm"
                                                  oncomplete="PF('deleteStationDialog').show()">
                                     <f:setPropertyActionListener value="#{station.location}" target="#{showChargingStations.selectedLocation}" />
@@ -120,12 +144,40 @@
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('deleteStationDialog').hide()" />
                         </p:confirmDialog>
+                        <!-- UPDATE Station Dialog -->
+                        <p:dialog header="Edit Station" widgetVar="manageStationDialog" modal="true" showEffect="fade"
+                                  draggable="false" resizable="false" closable="true">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel value="Location:" for="location" />
+                                <p:inputText id="location" value="#{showChargingStations.selectedStation.location}" readonly="true" />
+
+                                <h:outputLabel value="Charging Speed:" for="chargingSpeed" />
+                                <p:inputText id="chargingSpeed" value="#{showChargingStations.selectedStation.chargingSpeed}" />
+
+                                <h:outputLabel value="Available:" for="available" />
+                                <p:selectBooleanCheckbox id="available" value="#{showChargingStations.selectedStation.available}" />
+
+                                <h:outputLabel value="Current User:" for="userEmail" />
+                                <p:inputText id="userEmail" value="#{showChargingStations.selectedStation.currentUserEmail}" />
+
+                                <h:outputLabel value="Connector:" for="connector" />
+                                <h:selectOneMenu id="connector" value="#{showChargingStations.selectedStation.connector}">
+                                    <f:selectItems value="#{addChargingStation.connector}" />
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" action="#{showChargingStations.updateStation}" icon="pi pi-check"
+                                                 update="mainForm" process="@form" />
+                                <p:commandButton value="Cancel" type="button" icon="pi pi-times"
+                                                 onclick="PF('manageStationDialog').hide()" styleClass="ui-button-secondary" />
+                            </f:facet>
+                        </p:dialog>
+
                     </p:panel>
 
                     <!-- USERS -->
                     <p:panel header="👤 Users Panel">
-<!--                        selection="#{crudView.selectedProducts}"-->
-<!--                        rowKey="#{product.id}"-->
                         <p:dataTable id="datatable-users"
                                      var="user"
                                      value="#{showUsers.users}"
@@ -173,7 +225,13 @@
                         </p:confirmDialog>
 
                         <!-- UPDATE User Dialog -->
-                        <p:dialog header="Edit User" widgetVar="manageUserDialog" modal="true" showEffect="fade" draggable="false" resizable="false" closable="true">
+                        <p:dialog header="Edit User"
+                                  widgetVar="manageUserDialog"
+                                  modal="true"
+                                  showEffect="fade"
+                                  draggable="false"
+                                  resizable="false"
+                                  closable="true">
                             <h:panelGrid columns="2" cellpadding="5">
                                 <h:outputLabel value="Email:" for="email" />
                                 <p:inputText id="email" value="#{showUsers.selectedUser.email}" readonly="true" />

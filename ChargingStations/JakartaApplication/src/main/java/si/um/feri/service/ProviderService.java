@@ -48,6 +48,10 @@ public class ProviderService implements Serializable, ProviderIService {
 
     //  update
     public void updateProvider(ProviderVao updatedProvider) {
+        if (updatedProvider == null || updatedProvider.getProviderName() == null || updatedProvider.getProviderName().isBlank()) {
+            throw new IllegalArgumentException("❌ Invalid provider or missing name!");
+        }
+
         if (dao_provider.getProviderByName(updatedProvider.getProviderName()).isEmpty()) {
             throw new IllegalArgumentException("❌ Provider not found!");
         } else {

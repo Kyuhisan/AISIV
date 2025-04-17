@@ -47,6 +47,10 @@ public class ChargingStationService implements Serializable, ChargingStationISer
 
     //  update
     public void updateChargingStation(ChargingStationVao station) {
+        if (station == null || station.getLocation() == null || station.getLocation().isBlank()) {
+            throw new IllegalArgumentException("❌ Invalid station or missing location!");
+        }
+
         if (dao_station.getChargingStationByLocation(station.getLocation()).isEmpty()) {
             throw new IllegalArgumentException("❌ Station not found!");
         } else {

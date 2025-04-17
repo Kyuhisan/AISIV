@@ -36,12 +36,7 @@ public class ProviderDao implements ProviderIDao {
     //  update
     @Override
     public void updateProvider(ProviderVao updatedProvider) {
-//        synchronized (listOfProviders) {
-//            getProviderByName(updatedProvider.getProviderName()).ifPresentOrElse(
-//                    provider -> listOfProviders.set(listOfProviders.indexOf(provider), updatedProvider),
-//                    () -> System.out.println("❌ Provider not found!")
-//            );
-//        }
+        em.merge(updatedProvider);
     }
 
     //  delete

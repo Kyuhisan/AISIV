@@ -1,7 +1,6 @@
 package si.um.feri.beans;
 
 import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -9,7 +8,6 @@ import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
 import si.um.feri.service.interfaces.UserIService;
 import si.um.feri.vao.UserVao;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,15 +30,12 @@ public class ShowUsersBean implements Serializable {
     public void setSelectedEmail(String selectedEmail) {
         this.selectedEmail = selectedEmail;
     }
-
     public UserVao getSelectedUser() {
         return selectedUser;
     }
-
     public void setSelectedUser(UserVao selectedUser) {
         this.selectedUser = selectedUser;
     }
-
     public void setSelectedUser(String selectedEmail) {
         this.selectedUser = userService.getUserByEmail(selectedEmail).orElse(null);
     }

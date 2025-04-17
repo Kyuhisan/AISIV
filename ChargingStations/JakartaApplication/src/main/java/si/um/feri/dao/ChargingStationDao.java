@@ -36,12 +36,7 @@ public class ChargingStationDao implements ChargingStationIDao {
     //  update
     @Override
     public void updateChargingStation(ChargingStationVao station) {
-//        synchronized (listOfStations) {
-//            getChargingStationByLocation(station.getLocation()).ifPresentOrElse(
-//                    stationToUpdate -> listOfStations.set(listOfStations.indexOf(stationToUpdate), station),
-//                    () -> System.out.println("❌ Station not found!")
-//            );
-//        }
+        em.merge(station);
     }
 
     //  delete
