@@ -49,16 +49,16 @@ public class InitialDataBean {
         provider.addProvider(provider4);
         provider.addProvider(provider5);
 
-        ChargingStationVao station1 = new ChargingStationVao(provider1, connectorENUM.TYPE2, "Maribor - Center", true, 50.2);
-        ChargingStationVao station2 = new ChargingStationVao(provider1, connectorENUM.CCS, "Ljubljana - BTC", false, 22.5);
-        ChargingStationVao station3 = new ChargingStationVao(provider2, connectorENUM.CHADEMO, "Kranj - Main Road", true, 15.0);
-        ChargingStationVao station4 = new ChargingStationVao(provider2, connectorENUM.TYPE1, "Celje - South", true, 77.0);
-        ChargingStationVao station5 = new ChargingStationVao(provider3, connectorENUM.TESLA, "San Francisco - Market St.", true, 12.5);
-        ChargingStationVao station6 = new ChargingStationVao(provider3, connectorENUM.CCS, "Los Angeles - Hollywood Blvd.", false, 22.5);
-        ChargingStationVao station7 = new ChargingStationVao(provider4, connectorENUM.DOMESTIC, "Tokyo - Shibuya", true, 34.44);
-        ChargingStationVao station8 = new ChargingStationVao(provider4, connectorENUM.TYPE2, "Shanghai - Pudong", false, 50.2);
-        ChargingStationVao station9 = new ChargingStationVao(provider5, connectorENUM.TYPE1, "Vienna - City Center", true, 77.0);
-        ChargingStationVao station10 = new ChargingStationVao(provider5, connectorENUM.CCS, "Berlin - Alexanderplatz", true, 22.5);
+        ChargingStationVao station1 = new ChargingStationVao(provider1, connectorENUM.TYPE2, "Maribor-Center", true, 50.2);
+        ChargingStationVao station2 = new ChargingStationVao(provider1, connectorENUM.CCS, "Ljubljana-BTC", false, 22.5);
+        ChargingStationVao station3 = new ChargingStationVao(provider2, connectorENUM.CHADEMO, "Kranj-MainRoad", true, 15.0);
+        ChargingStationVao station4 = new ChargingStationVao(provider2, connectorENUM.TYPE1, "Celje-South", true, 77.0);
+        ChargingStationVao station5 = new ChargingStationVao(provider3, connectorENUM.TESLA, "SanFrancisco-MarketSt.", true, 12.5);
+        ChargingStationVao station6 = new ChargingStationVao(provider3, connectorENUM.CCS, "LosAngeles-HollywoodBlvd.", false, 22.5);
+        ChargingStationVao station7 = new ChargingStationVao(provider4, connectorENUM.DOMESTIC, "Tokyo-Shibuya", true, 34.44);
+        ChargingStationVao station8 = new ChargingStationVao(provider4, connectorENUM.TYPE2, "Shanghai-Pudong", false, 50.2);
+        ChargingStationVao station9 = new ChargingStationVao(provider5, connectorENUM.TYPE1, "Vienna-CityCenter", true, 77.0);
+        ChargingStationVao station10 = new ChargingStationVao(provider5, connectorENUM.CCS, "Berlin-Alexanderplatz", true, 22.5);
         station2.setCurrentUserEmail("matickuhar@gmail.com");
         station6.setCurrentUserEmail("janezplece@gmail.com");
         station5.setCurrentUserEmail("aleskokot@gmail.com");

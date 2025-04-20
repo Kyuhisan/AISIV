@@ -1,10 +1,8 @@
 package si.um.feri.vao;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import si.um.feri.enums.connectorENUM;
 import si.um.feri.observers.ChargingStationObserver;
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
+@Data
 public class ChargingStationVao {
     //  variables
     @Id
@@ -27,6 +26,7 @@ public class ChargingStationVao {
     private ProviderVao provider;
 
     @Transient
+    @JsonbTransient
     private List<ChargingStationObserver> stationObservers = new ArrayList<>();
 
     private boolean isAvailable;
